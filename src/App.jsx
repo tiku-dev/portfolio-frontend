@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
+import { MobileBottomNav } from './components/MobileBottomNav';
 import { Hero } from './components/Hero';
 import { TelemetryRibbon } from './components/TelemetryRibbon';
 import { ProjectsSection } from './components/ProjectsSection';
@@ -22,8 +23,8 @@ export function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-orange-500 selection:text-white">
-      {/* Top Navigation */}
+    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-orange-500 selection:text-white pb-24 md:pb-0">
+      {/* Top Navigation with Mobile Drawer & Live Status */}
       <Navbar onOpenTerminal={() => setTerminalOpen(true)} />
 
       <main className="flex-1 space-y-4">
@@ -54,6 +55,9 @@ export function App() {
         isOpen={terminalOpen}
         onClose={() => setTerminalOpen(false)}
       />
+
+      {/* Mobile Floating Bottom Navigation Bar */}
+      <MobileBottomNav onOpenTerminal={() => setTerminalOpen(true)} />
     </div>
   );
 }
