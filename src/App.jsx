@@ -1,93 +1,59 @@
-import React, { useState } from 'react';
-import { Button, PrimaryButton, SecondaryButton } from './components/Button';
-import { StandardForm } from './components/Form';
+import React, { useState, useEffect } from 'react';
+import { Navbar } from './components/Navbar';
+import { Hero } from './components/Hero';
+import { TelemetryRibbon } from './components/TelemetryRibbon';
+import { ProjectsSection } from './components/ProjectsSection';
+import { ExperienceSection } from './components/ExperienceSection';
+import { ContactSection } from './components/ContactSection';
+import { Footer } from './components/Footer';
+import { TerminalModal } from './components/TerminalModal';
+import { getResumeData } from './api/client';
 
-function App() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submittedData, setSubmittedData] = useState(null);
+export function App() {
+  const [terminalOpen, setTerminalOpen] = useState(false);
+  const [profileBio, setProfileBio] = useState(null);
 
-  const handleSubmit = (e) => {
-    setIsSubmitting(true);
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
-    
-    // Simulate API submission
-    setTimeout(() => {
-      setSubmittedData(data);
-      setIsSubmitting(false);
-    }, 1000);
-  };
-
-  const handleReset = () => {
-    setSubmittedData(null);
-  };
+  useEffect(() => {
+    getResumeData()
+      .then((data) => {
+        if (data?.profile) setProfileBio(data.profile);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto space-y-12">
-        {/* Header */}
-        <header className="text-center space-y-2">
-          <h1 className="text-3xl font-extrabold tracking-tight sm:text-4xl text-slate-700 dark:text-slate-200">
-            Portfolio Component Showcase
-          </h1>
-          <p className="text-slate-500 dark:text-slate-400">
-            Engineered with the chosen Orange theme: rounded inputs and side-by-side complementary buttons.
-          </p>
-        </header>
+    <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-orange-500 selection:text-white">
+      {/* Top Navigation */}
+      <Navbar onOpenTerminal={() => setTerminalOpen(true)} />
 
-        {/* Section 1: Side-by-Side Orange Buttons (No Black) */}
-        <section className="bg-white dark:bg-slate-950 p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
-          <div>
-            <h2 className="text-lg font-bold text-slate-700 dark:text-slate-200">
-              1. Side-by-Side Standard Buttons
-            </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Solid Orange 500 primary button paired with a soft-tinted Orange secondary button (no black).
-            </p>
-          </div>
+      <main className="flex-1 space-y-4">
+        {/* Hero Section */}
+        <Hero
+          bio={profileBio}
+          onOpenTerminal={() => setTerminalOpen(true)}
+        />
 
-          <div className="flex flex-wrap items-center gap-4 pt-2">
-            {/* Primary Orange 500 Button */}
-            <PrimaryButton>
-              Explore Projects
-            </PrimaryButton>
+        {/* Live Backend Telemetry Stats */}
+        <TelemetryRibbon />
 
-            {/* Secondary Soft Orange (Different visual weight, no black) */}
-            <SecondaryButton>
-              View Architecture
-            </SecondaryButton>
+        {/* Systems & Case Studies with Live Ping Probe */}
+        <ProjectsSection />
 
-            {/* Outline Orange */}
-            <Button variant="outline">
-              Download CV
-            </Button>
-          </div>
-        </section>
+        {/* Career Timeline & Experience */}
+        <ExperienceSection />
 
-        {/* Section 2: Form with Extra-Rounded Inputs */}
-        <section className="space-y-4">
-          <div className="text-center sm:text-left">
-            <h2 className="text-lg font-bold text-slate-700 dark:text-slate-200">
-              2. Standard Form with Rounded Corners
-            </h2>
-          </div>
+        {/* Contact Pipeline with Rounded Inputs & Honeypot */}
+        <ContactSection />
+      </main>
 
-          <StandardForm
-            onSubmit={handleSubmit}
-            onReset={handleReset}
-            isSubmitting={isSubmitting}
-          />
+      {/* Footer */}
+      <Footer onOpenTerminal={() => setTerminalOpen(true)} />
 
-          {submittedData && (
-            <div className="max-w-xl mx-auto p-4 bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800 text-orange-900 dark:text-orange-200 rounded-2xl text-sm">
-              <p className="font-semibold">Transmission Captured:</p>
-              <pre className="mt-1 text-xs overflow-x-auto">
-                {JSON.stringify(submittedData, null, 2)}
-              </pre>
-            </div>
-          )}
-        </section>
-      </div>
+      {/* Interactive Developer Terminal / Console Modal */}
+      <TerminalModal
+        isOpen={terminalOpen}
+        onClose={() => setTerminalOpen(false)}
+      />
     </div>
   );
 }
