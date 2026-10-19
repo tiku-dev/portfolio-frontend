@@ -13,6 +13,7 @@ import { getResumeData } from './api/client';
 export function App() {
   const [terminalOpen, setTerminalOpen] = useState(false);
   const [profileBio, setProfileBio] = useState(null);
+  const [activeSection, setActiveSection] = useState('projects');
 
   useEffect(() => {
     getResumeData()
@@ -22,10 +23,67 @@ export function App() {
       .catch(() => {});
   }, []);
 
+  // Synchronize initial hash if present
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && ['projects', 'telemetry', 'experience', 'contact'].includes(hash)) {
+      setActiveSection(hash);
+    }
+  }, []);
+
+  // Smooth scroll handler for both desktop and mobile navigation clicks
+  const handleNavigate = (sectionId) => {
+    setActiveSection(sectionId);
+    if (sectionId === 'hero') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.history.replaceState(null, '', ' ');
+      return;
+    }
+    const target = document.getElementById(sectionId);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+      window.history.replaceState(null, '', `#${sectionId}`);
+    }
+  };
+
+  // Scrollspy to synchronize active nav links as the user scrolls
+  useEffect(() => {
+    const sectionIds = ['hero', 'projects', 'telemetry', 'experience', 'contact'];
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          // Highest intersection ratio wins
+          const topVisible = visible.reduce((max, e) =>
+            e.intersectionRatio > max.intersectionRatio ? e : max
+          );
+          if (topVisible.target.id && topVisible.target.id !== 'hero') {
+            setActiveSection(topVisible.target.id);
+          }
+        }
+      },
+      {
+        rootMargin: '-20% 0px -40% 0px',
+        threshold: [0.1, 0.25, 0.5],
+      }
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-orange-500 selection:text-white pb-24 md:pb-0">
       {/* Top Navigation with Mobile Drawer & Live Status */}
-      <Navbar onOpenTerminal={() => setTerminalOpen(true)} />
+      <Navbar
+        activeSection={activeSection}
+        onNavigate={handleNavigate}
+        onOpenTerminal={() => setTerminalOpen(true)}
+      />
 
       <main className="flex-1 space-y-4">
         {/* Hero Section */}
@@ -57,7 +115,11 @@ export function App() {
       />
 
       {/* Mobile Floating Bottom Navigation Bar */}
-      <MobileBottomNav onOpenTerminal={() => setTerminalOpen(true)} />
+      <MobileBottomNav
+        activeSection={activeSection}
+        onNavigate={handleNavigate}
+        onOpenTerminal={() => setTerminalOpen(true)}
+      />
     </div>
   );
 }

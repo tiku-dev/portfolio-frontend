@@ -3,10 +3,17 @@ import { Button, PrimaryButton } from './Button';
 import { getBackendHealth, getResumePdfDownloadUrl } from '../api/client';
 import { TerminalIcon, DownloadIcon, MenuIcon, CloseIcon } from './icons';
 
-export function Navbar({ onOpenTerminal }) {
+export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate }) {
   const [health, setHealth] = useState({ status: 'checking', database: 'checking' });
   const [resumeDropdown, setResumeDropdown] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const navItems = [
+    { id: 'projects', label: 'Case Studies', mobileLabel: 'Case Studies & Projects' },
+    { id: 'telemetry', label: 'Live Telemetry', mobileLabel: 'Live Telemetry & Stats' },
+    { id: 'experience', label: 'Experience', mobileLabel: 'Career Experience Timeline' },
+    { id: 'contact', label: 'Contact', mobileLabel: 'Contact Pipeline' },
+  ];
 
   useEffect(() => {
     getBackendHealth()
@@ -18,12 +25,27 @@ export function Navbar({ onOpenTerminal }) {
 
   const closeMobileMenu = () => setMobileMenuOpen(false);
 
+  const handleLinkClick = (e, id) => {
+    e.preventDefault();
+    closeMobileMenu();
+    if (onNavigate) {
+      onNavigate(id);
+    } else {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/90 dark:bg-slate-950/90 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Brand / Logo */}
         <div className="flex items-center gap-3">
-          <a href="#" className="flex items-center gap-2 group">
+          <a
+            href="#hero"
+            onClick={(e) => handleLinkClick(e, 'hero')}
+            className="flex items-center gap-2 group"
+          >
             <div className="w-9 h-9 rounded-2xl bg-orange-500 text-white font-extrabold flex items-center justify-center text-lg shadow-sm shadow-orange-500/20 group-hover:scale-105 transition-transform">
               λ
             </div>
@@ -46,20 +68,26 @@ export function Navbar({ onOpenTerminal }) {
           </div>
         </div>
 
-        {/* Desktop Navigation Links */}
-        <nav className="hidden md:flex items-center gap-7 text-sm font-medium text-slate-600 dark:text-slate-300">
-          <a href="#projects" className="hover:text-orange-500 transition-colors">
-            Case Studies
-          </a>
-          <a href="#telemetry" className="hover:text-orange-500 transition-colors">
-            Live Telemetry
-          </a>
-          <a href="#experience" className="hover:text-orange-500 transition-colors">
-            Experience
-          </a>
-          <a href="#contact" className="hover:text-orange-500 transition-colors">
-            Contact
-          </a>
+        {/* Desktop Navigation Links with Active State */}
+        <nav className="hidden md:flex items-center gap-2 text-sm font-medium">
+          {navItems.map((item) => {
+            const isActive = activeSection === item.id;
+            return (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                onClick={(e) => handleLinkClick(e, item.id)}
+                aria-current={isActive ? 'page' : undefined}
+                className={`px-3.5 py-1.5 rounded-xl font-semibold transition-all ${
+                  isActive
+                    ? 'bg-orange-50 dark:bg-orange-950/60 text-orange-600 dark:text-orange-400 border border-orange-200/90 dark:border-orange-800/80 shadow-2xs'
+                    : 'text-slate-600 dark:text-slate-300 hover:text-orange-500 hover:bg-slate-100/70 dark:hover:bg-slate-900/70 border border-transparent'
+                }`}
+              >
+                {item.label}
+              </a>
+            );
+          })}
         </nav>
 
         {/* Action Buttons (Desktop) */}
@@ -142,7 +170,7 @@ export function Navbar({ onOpenTerminal }) {
         </div>
       </div>
 
-      {/* Mobile Slide-down Drawer Menu */}
+      {/* Mobile Slide-down Drawer Menu with Active Highlights */}
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-3 pb-6 space-y-4 shadow-xl animate-fade-in">
           {/* Status badge in mobile menu */}
@@ -154,35 +182,26 @@ export function Navbar({ onOpenTerminal }) {
             </span>
           </div>
 
-          <nav className="flex flex-col space-y-1 text-sm font-semibold">
-            <a
-              href="#projects"
-              onClick={closeMobileMenu}
-              className="px-3 py-2.5 rounded-xl hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600 text-slate-700 dark:text-slate-200 transition-colors"
-            >
-              Case Studies & Projects
-            </a>
-            <a
-              href="#telemetry"
-              onClick={closeMobileMenu}
-              className="px-3 py-2.5 rounded-xl hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600 text-slate-700 dark:text-slate-200 transition-colors"
-            >
-              Live Telemetry & Stats
-            </a>
-            <a
-              href="#experience"
-              onClick={closeMobileMenu}
-              className="px-3 py-2.5 rounded-xl hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600 text-slate-700 dark:text-slate-200 transition-colors"
-            >
-              Career Experience Timeline
-            </a>
-            <a
-              href="#contact"
-              onClick={closeMobileMenu}
-              className="px-3 py-2.5 rounded-xl hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600 text-slate-700 dark:text-slate-200 transition-colors"
-            >
-              Contact Pipeline
-            </a>
+          <nav className="flex flex-col space-y-1.5 text-sm font-semibold">
+            {navItems.map((item) => {
+              const isActive = activeSection === item.id;
+              return (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  onClick={(e) => handleLinkClick(e, item.id)}
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`px-3.5 py-2.5 rounded-xl transition-all flex items-center justify-between ${
+                    isActive
+                      ? 'bg-orange-500 text-white font-bold shadow-sm shadow-orange-500/25 pl-4'
+                      : 'text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600 pl-3.5 font-medium'
+                  }`}
+                >
+                  <span>{item.mobileLabel}</span>
+                  {isActive && <span className="w-2 h-2 rounded-full bg-white animate-pulse" />}
+                </a>
+              );
+            })}
           </nav>
 
           <div className="pt-2 flex flex-col gap-2">

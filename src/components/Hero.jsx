@@ -19,7 +19,7 @@ export function Hero({ onOpenTerminal, bio }) {
   ];
 
   return (
-    <section className="relative overflow-hidden py-16 sm:py-24">
+    <section id="hero" className="relative overflow-hidden py-16 sm:py-24">
       {/* Decorative background glow */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-96 h-96 bg-orange-500/10 dark:bg-orange-500/5 rounded-full blur-3xl -z-10 pointer-events-none" />
 
