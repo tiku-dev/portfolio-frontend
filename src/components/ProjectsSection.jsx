@@ -3,6 +3,7 @@ import { getProjects, pingProject } from '../api/client';
 import { PrimaryButton, SecondaryButton } from './Button';
 import { CaseStudyModal } from './CaseStudyModal';
 import { ActivityIcon, ExternalLinkIcon, GithubIcon, RefreshIcon } from './icons';
+import { ProjectCardSkeleton } from './Skeleton';
 
 export function ProjectsSection() {
   const [projects, setProjects] = useState([]);
@@ -87,10 +88,10 @@ export function ProjectsSection() {
       {/* Projects Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-10">
         {loading ? (
-          <div className="col-span-full py-16 text-center text-slate-500 text-sm flex items-center justify-center gap-2">
-            <RefreshIcon className="w-4 h-4 animate-spin text-orange-500" />
-            <span>Loading case studies...</span>
-          </div>
+          <>
+            <ProjectCardSkeleton />
+            <ProjectCardSkeleton />
+          </>
         ) : projects.length === 0 ? (
           <div className="col-span-full py-16 text-center text-slate-400 text-sm">
             No projects found matching the selected tag.

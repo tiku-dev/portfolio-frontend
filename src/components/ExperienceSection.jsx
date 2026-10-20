@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getResumeData, getResumePdfDownloadUrl } from '../api/client';
 import { DownloadIcon, RefreshIcon } from './icons';
 import { PrimaryButton, SecondaryButton } from './Button';
+import { ExperienceSkeleton } from './Skeleton';
 
 export function ExperienceSection() {
   const [experiences, setExperiences] = useState([]);
@@ -52,10 +53,7 @@ export function ExperienceSection() {
       {/* Experience Timeline */}
       <div className="relative pt-10 space-y-8 before:absolute before:inset-0 before:left-3 sm:before:left-5 before:w-0.5 before:bg-slate-200 dark:before:bg-slate-800">
         {loading ? (
-          <div className="py-12 text-center text-slate-500 text-sm flex items-center justify-center gap-2">
-            <RefreshIcon className="w-4 h-4 animate-spin text-orange-500" />
-            <span>Loading experience timeline...</span>
-          </div>
+          <ExperienceSkeleton />
         ) : (
           experiences.map((exp) => (
             <div key={exp.id} className="relative flex items-start gap-4 sm:gap-6 group">

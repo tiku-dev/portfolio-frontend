@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getTelemetryStats } from '../api/client';
 import { ActivityIcon, RefreshIcon } from './icons';
+import { TelemetrySkeleton } from './Skeleton';
 
 export function TelemetryRibbon() {
   const [stats, setStats] = useState(null);
@@ -51,8 +52,11 @@ export function TelemetryRibbon() {
           </button>
         </div>
 
-        {/* Metric Cards Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6">
+        {/* Metric Cards Grid or Skeleton */}
+        {loading || !stats ? (
+          <TelemetrySkeleton />
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6">
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/60">
               <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                 API Requests Served
@@ -101,6 +105,7 @@ export function TelemetryRibbon() {
               </span>
             </div>
           </div>
+        )}
         </div>
       </section>
     );

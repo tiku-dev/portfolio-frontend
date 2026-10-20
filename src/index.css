@@ -10,3 +10,50 @@ h1, h2, h3, h4, h5, h6 {
     color: #e2e8f0;
   }
 }
+
+/* Shimmer keyframe for realistic responsive skeleton loading with warm theme highlight */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(241, 245, 249, 0.85) 25%,
+    rgba(254, 237, 213, 0.75) 50%,
+    rgba(241, 245, 249, 0.85) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite ease-in-out;
+}
+
+@media (prefers-color-scheme: dark) {
+  .animate-shimmer {
+    background: linear-gradient(
+      90deg,
+      rgba(30, 41, 59, 0.7) 25%,
+      rgba(154, 52, 18, 0.28) 50%,
+      rgba(30, 41, 59, 0.7) 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite ease-in-out;
+  }
+}
+
+/* Accessible reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-shimmer {
+    animation: none;
+    background: rgba(241, 245, 249, 0.85);
+  }
+  @media (prefers-color-scheme: dark) {
+    .animate-shimmer {
+      background: rgba(30, 41, 59, 0.7);
+    }
+  }
+}
