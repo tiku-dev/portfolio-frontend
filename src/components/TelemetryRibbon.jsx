@@ -24,7 +24,7 @@ export function TelemetryRibbon() {
   }, []);
 
   return (
-    <section id="telemetry" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <section id="telemetry" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 reveal-on-scroll">
       <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-800/80">
           <div>
@@ -57,7 +57,7 @@ export function TelemetryRibbon() {
           <TelemetrySkeleton />
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6">
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/60">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/60 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
               <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                 API Requests Served
               </span>
@@ -69,7 +69,7 @@ export function TelemetryRibbon() {
               </span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/60">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/60 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
               <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                 Avg Backend Latency
               </span>
@@ -81,7 +81,7 @@ export function TelemetryRibbon() {
               </span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/60">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/60 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
               <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                 Unique Visitors
               </span>
@@ -93,7 +93,7 @@ export function TelemetryRibbon() {
               </span>
             </div>
 
-            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/60">
+            <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/60 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
               <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
                 System Health
               </span>

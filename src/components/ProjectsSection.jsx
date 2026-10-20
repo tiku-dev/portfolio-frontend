@@ -51,7 +51,7 @@ export function ProjectsSection() {
   };
 
   return (
-    <section id="projects" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <section id="projects" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 reveal-on-scroll">
       {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-slate-200/80 dark:border-slate-800/80">
         <div>
@@ -103,7 +103,7 @@ export function ProjectsSection() {
             return (
               <div
                 key={p.slug}
-                className="group relative flex flex-col justify-between bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-orange-300 dark:hover:border-orange-900/60 transition-all"
+                className="group relative flex flex-col justify-between bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-sm hover:shadow-xl hover:shadow-orange-500/5 hover:-translate-y-1.5 hover:border-orange-400/80 dark:hover:border-orange-800/80 transition-all duration-300"
               >
                 <div>
                   {/* Top line: Status probe pill & stars */}

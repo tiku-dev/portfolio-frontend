@@ -22,7 +22,7 @@ export function ExperienceSection() {
   }, []);
 
   return (
-    <section id="experience" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <section id="experience" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 reveal-on-scroll">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-slate-200/80 dark:border-slate-800/80">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-orange-500">
@@ -58,12 +58,12 @@ export function ExperienceSection() {
           experiences.map((exp) => (
             <div key={exp.id} className="relative flex items-start gap-4 sm:gap-6 group">
               {/* Timeline Indicator Dot */}
-              <div className="relative z-10 w-7 h-7 sm:w-10 sm:h-10 rounded-2xl bg-orange-50 dark:bg-orange-950/40 border-2 border-orange-500 flex items-center justify-center text-orange-600 font-bold shrink-0 text-xs shadow-xs">
+              <div className="relative z-10 w-7 h-7 sm:w-10 sm:h-10 rounded-2xl bg-orange-50 dark:bg-orange-950/40 border-2 border-orange-500 flex items-center justify-center text-orange-600 font-bold shrink-0 text-xs shadow-xs group-hover:scale-110 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
                 λ
               </div>
 
               {/* Experience Card */}
-              <div className="flex-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-7 shadow-sm group-hover:border-orange-300 dark:group-hover:border-orange-900/60 transition-colors">
+              <div className="flex-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-7 shadow-sm group-hover:border-orange-300 dark:group-hover:border-orange-800/80 group-hover:-translate-y-1 group-hover:shadow-lg transition-all duration-300">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
                   <h3 className="text-lg font-bold text-slate-700 dark:text-slate-100">
                     {exp.role} <span className="text-orange-500 font-semibold">@ {exp.company}</span>

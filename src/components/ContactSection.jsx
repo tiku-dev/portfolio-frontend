@@ -59,7 +59,7 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <section id="contact" className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 reveal-on-scroll">
       <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-sm space-y-8">
         <div className="text-center max-w-xl mx-auto space-y-2">
           <span className="text-xs font-bold uppercase tracking-wider text-orange-500">

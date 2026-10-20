@@ -64,11 +64,11 @@ export function TerminalModal({ isOpen, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/75 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/75 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-3xl h-[85vh] sm:h-[560px] flex flex-col bg-slate-950 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden font-mono text-sm"
+        className="relative w-full max-w-3xl h-[85vh] sm:h-[560px] flex flex-col bg-slate-950 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden font-mono text-sm animate-modal-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Terminal Title Bar */}

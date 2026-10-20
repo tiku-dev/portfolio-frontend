@@ -114,7 +114,7 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate 
 
             {resumeDropdown && (
               <div
-                className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2 z-50 text-xs font-medium"
+                className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2 z-50 text-xs font-medium animate-slide-down"
                 onMouseLeave={() => setResumeDropdown(false)}
               >
                 <div className="px-3 py-1.5 text-slate-400 dark:text-slate-500 uppercase tracking-wider text-[10px]">
@@ -172,7 +172,7 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate 
 
       {/* Mobile Slide-down Drawer Menu with Active Highlights */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-3 pb-6 space-y-4 shadow-xl animate-fade-in">
+        <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-3 pb-6 space-y-4 shadow-xl animate-slide-down">
           {/* Status badge in mobile menu */}
           <div className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800/80 text-xs">
             <span className="text-slate-500 dark:text-slate-400">Backend API Status:</span>
