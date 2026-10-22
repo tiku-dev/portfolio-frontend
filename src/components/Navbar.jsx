@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Button, PrimaryButton } from './Button';
 import { getBackendHealth, getResumePdfDownloadUrl } from '../api/client';
-import { TerminalIcon, DownloadIcon, MenuIcon, CloseIcon } from './icons';
+import { TerminalIcon, DownloadIcon, MenuIcon, CloseIcon, DeviceMobileIcon } from './icons';
 
-export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate }) {
+export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate, onOpenInstall }) {
   const [health, setHealth] = useState({ status: 'checking', database: 'checking' });
   const [resumeDropdown, setResumeDropdown] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -92,6 +92,18 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate 
 
         {/* Action Buttons (Desktop) */}
         <div className="hidden md:flex items-center gap-2.5">
+          {/* Install App Prompt Button */}
+          {onOpenInstall && (
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={onOpenInstall}
+              leftIcon={<DeviceMobileIcon className="w-4 h-4 text-orange-600 dark:text-orange-400" />}
+            >
+              Install App
+            </Button>
+          )}
+
           {/* Terminal Trigger */}
           <Button
             variant="outline"
@@ -205,6 +217,21 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate 
           </nav>
 
           <div className="pt-2 flex flex-col gap-2">
+            {onOpenInstall && (
+              <Button
+                variant="secondary"
+                size="md"
+                fullWidth
+                onClick={() => {
+                  closeMobileMenu();
+                  onOpenInstall();
+                }}
+                leftIcon={<DeviceMobileIcon className="w-4 h-4 text-orange-600 dark:text-orange-400" />}
+              >
+                Install App on Device
+              </Button>
+            )}
+
             <Button
               variant="outline"
               size="md"
