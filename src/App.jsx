@@ -8,10 +8,12 @@ import { ExperienceSection } from './components/ExperienceSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { TerminalModal } from './components/TerminalModal';
+import { InstallAppModal } from './components/InstallAppModal';
 import { getResumeData } from './api/client';
 
 export function App() {
   const [terminalOpen, setTerminalOpen] = useState(false);
+  const [installPromptOpen, setInstallPromptOpen] = useState(false);
   const [profileBio, setProfileBio] = useState(null);
   const [activeSection, setActiveSection] = useState('projects');
 
@@ -30,6 +32,28 @@ export function App() {
       setActiveSection(hash);
     }
   }, []);
+
+  // Automatically show PWA install prompt when user visits site (mobile & PC)
+  useEffect(() => {
+    const isStandalone =
+      window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true;
+
+    const dismissed = sessionStorage.getItem('pwa_prompt_dismissed');
+
+    // If not already running as installed app and not dismissed during this browser session
+    if (!isStandalone && !dismissed) {
+      const timer = setTimeout(() => {
+        setInstallPromptOpen(true);
+      }, 1200);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const handleCloseInstallPrompt = () => {
+    setInstallPromptOpen(false);
+    sessionStorage.setItem('pwa_prompt_dismissed', 'true');
+  };
 
   // Smooth scroll handler for both desktop and mobile navigation clicks
   const handleNavigate = (sectionId) => {
@@ -100,11 +124,12 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-orange-500 selection:text-white pb-24 md:pb-0">
-      {/* Top Navigation with Mobile Drawer & Live Status */}
+      {/* Top Navigation with Mobile Drawer, Live Status & Install App Trigger */}
       <Navbar
         activeSection={activeSection}
         onNavigate={handleNavigate}
         onOpenTerminal={() => setTerminalOpen(true)}
+        onOpenInstall={() => setInstallPromptOpen(true)}
       />
 
       <main className="flex-1 space-y-4">
@@ -134,6 +159,12 @@ export function App() {
       <TerminalModal
         isOpen={terminalOpen}
         onClose={() => setTerminalOpen(false)}
+      />
+
+      {/* Download / Install App Modal for Mobile & PC */}
+      <InstallAppModal
+        isOpen={installPromptOpen}
+        onClose={handleCloseInstallPrompt}
       />
 
       {/* Mobile Floating Bottom Navigation Bar */}

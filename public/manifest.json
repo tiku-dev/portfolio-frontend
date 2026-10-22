@@ -1,0 +1,20 @@
+{
+  "short_name": "Backend.io",
+  "name": "Backend.io - Systems & Distributed Architecture",
+  "description": "High-Performance Distributed Systems & Backend Engineering Portfolio",
+  "icons": [
+    {
+      "src": "/pwa-icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "192x192 512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/",
+  "background_color": "#020617",
+  "theme_color": "#f97316",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "categories": ["developer", "productivity", "utilities"]
+}
+
