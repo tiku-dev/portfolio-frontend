@@ -1,5 +1,5 @@
-// Backend.io Portfolio Service Worker
-const CACHE_NAME = 'backend-io-cache-v1';
+// tiku dev Portfolio Service Worker
+const CACHE_NAME = 'tiku-dev-cache-v2';
 const PRECACHE_URLS = [
   '/',
   '/index.html',
@@ -33,17 +33,29 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Network-first for navigation requests so updates show immediately
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match('/') || caches.match('/index.html'))
+    );
+    return;
+  }
+
+  // Stale-while-revalidate or cache-first for other assets
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
         return cachedResponse;
       }
-      return fetch(event.request).catch(() => {
-        // Fallback for navigation requests
-        if (event.request.mode === 'navigate') {
-          return caches.match('/');
-        }
-      });
+      return fetch(event.request);
     })
   );
 });

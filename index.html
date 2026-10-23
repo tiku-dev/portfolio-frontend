@@ -1,33 +1,37 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/pwa-icon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>tiku dev | Full Stack Software Engineer</title>
-    <meta name="description" content="Senior Full Stack & Systems Engineer Portfolio featuring reactive React/TS frontends, micro-demos, live telemetry, and resilient Python/Django backends." />
-    
-    <!-- PWA & Mobile Web App Meta -->
-    <link rel="manifest" href="/manifest.json" />
-    <meta name="theme-color" content="#f97316" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="apple-mobile-web-app-title" content="tiku dev" />
-    <link rel="apple-touch-icon" href="/pwa-icon.svg" />
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-    <script>
-      // Register service worker for PWA installability
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').catch((err) => {
-            console.warn('[PWA] Service Worker registration failed:', err);
-          });
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/pwa-icon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tiku dev | Full Stack Software Engineer</title>
+  <meta name="description"
+    content="Intermediate Full Stack & Systems Engineer Portfolio featuring reactive React/TS frontends, micro-demos, live telemetry, and resilient Python/Django backends." />
+
+  <!-- PWA & Mobile Web App Meta -->
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#f97316" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="tiku dev" />
+  <link rel="apple-touch-icon" href="/pwa-icon.svg" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+  <script>
+    // Register service worker for PWA installability
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch((err) => {
+          console.warn('[PWA] Service Worker registration failed:', err);
         });
-      }
-    </script>
-  </body>
+      });
+    }
+  </script>
+</body>
+
 </html>

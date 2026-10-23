@@ -161,7 +161,7 @@ export function ContactSection() {
               size="md"
               isLoading={submitting}
             >
-              Dispatch Transmission
+              Submit Message
             </PrimaryButton>
 
             <SecondaryButton
