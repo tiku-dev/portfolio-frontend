@@ -1,3 +1,5 @@
+import resumePdfAsset from '../assets/Tiku Faith – Software Engineer Resume.pdf';
+
 /**
  * Centralized API Client for Django Backend.
  * Connects to http://127.0.0.1:8000/api/v1/ with graceful fallback data.
@@ -190,7 +192,7 @@ export async function getResumeData() {
   } catch {
     return {
       profile: {
-        full_name: 'Tiku',
+        full_name: 'Tiku Faith',
         headline: 'Senior Full Stack & Systems Engineer',
         summary: 'Full Stack Engineer with deep expertise across modern web applications — crafting reactive, polished React & TypeScript user interfaces and architecting resilient, distributed Django, PostgreSQL, and Redis backend infrastructure.',
         email: 'tiku.dev@example.com',
@@ -248,8 +250,8 @@ export async function getResumeData() {
 }
 
 export function getResumePdfDownloadUrl(focus = null) {
-  const query = focus ? `?focus=${encodeURIComponent(focus)}` : '';
-  return `${API_BASE_URL}/api/v1/resume/pdf/${query}`;
+  // Use the authored PDF resume from the assets folder directly
+  return resumePdfAsset || '/Tiku-Faith-Software-Engineer-Resume.pdf';
 }
 
 // 3. Contact API
@@ -289,7 +291,7 @@ export async function runTerminalCommand(command) {
     }
     if (cmd === 'whoami') {
       return {
-        output: 'Tiku (@tiku-dev) - Senior Full Stack & Systems Engineer\nSpecialization: React 19, TypeScript, Python, Django & Distributed Systems\nGitHub: https://github.com/tiku-dev | Status: 🟢 Open to Senior & Lead Roles',
+        output: 'Tiku Faith (@tiku-dev) - Senior Full Stack & Systems Engineer\nSpecialization: React 19, TypeScript, Python, Django & Distributed Systems\nGitHub: https://github.com/tiku-dev | Status: 🟢 Open to Senior & Lead Roles',
         status: 'ok',
       };
     }

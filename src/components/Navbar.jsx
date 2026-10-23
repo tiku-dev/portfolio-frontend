@@ -115,70 +115,38 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate,
             CLI Console
           </Button>
 
-          {/* Dynamic Resume PDF Download Dropdown */}
-          <div className="relative">
+          {/* Direct Resume PDF Download */}
+          <a
+            href={getResumePdfDownloadUrl()}
+            target="_blank"
+            rel="noreferrer"
+            download="Tiku-Faith-Software-Engineer-Resume.pdf"
+            title="Download Tiku Faith's Resume PDF"
+          >
             <PrimaryButton
               size="sm"
-              onClick={() => setResumeDropdown(!resumeDropdown)}
               leftIcon={<DownloadIcon className="w-4 h-4 text-white" />}
             >
               Resume PDF
             </PrimaryButton>
-
-            {resumeDropdown && (
-              <div
-                className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2 z-50 text-xs font-medium animate-slide-down"
-                onMouseLeave={() => setResumeDropdown(false)}
-              >
-                <div className="px-3 py-1.5 text-slate-400 dark:text-slate-500 uppercase tracking-wider text-[10px]">
-                  Generate Tailored PDF
-                </div>
-                <a
-                  href={getResumePdfDownloadUrl('fullstack')}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600"
-                >
-                  ⚡ Full Stack Focus PDF
-                </a>
-                <a
-                  href={getResumePdfDownloadUrl('frontend')}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600"
-                >
-                  🎨 Frontend & UI Systems PDF
-                </a>
-                <a
-                  href={getResumePdfDownloadUrl('backend')}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600"
-                >
-                  ⚙️ Backend & Architecture PDF
-                </a>
-                <a
-                  href={getResumePdfDownloadUrl()}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600 border-t border-slate-100 dark:border-slate-800 mt-1 pt-2"
-                >
-                  📄 Comprehensive CV
-                </a>
-              </div>
-            )}
-          </div>
+          </a>
         </div>
 
         {/* Mobile Hamburger & Actions */}
         <div className="flex md:hidden items-center gap-2">
-          <PrimaryButton
-            size="sm"
-            onClick={() => window.open(getResumePdfDownloadUrl('fullstack'), '_blank')}
-            leftIcon={<DownloadIcon className="w-3.5 h-3.5 text-white" />}
+          <a
+            href={getResumePdfDownloadUrl()}
+            target="_blank"
+            rel="noreferrer"
+            download="Tiku-Faith-Software-Engineer-Resume.pdf"
           >
-            PDF
-          </PrimaryButton>
+            <PrimaryButton
+              size="sm"
+              leftIcon={<DownloadIcon className="w-3.5 h-3.5 text-white" />}
+            >
+              PDF
+            </PrimaryButton>
+          </a>
 
           <button
             type="button"

@@ -39,12 +39,13 @@ export function ExperienceSection() {
         {/* Dynamic PDF Trigger */}
         <div className="flex items-center gap-3">
           <a
-            href={getResumePdfDownloadUrl('fullstack')}
+            href={getResumePdfDownloadUrl()}
             target="_blank"
             rel="noreferrer"
+            download="Tiku-Faith-Software-Engineer-Resume.pdf"
           >
             <PrimaryButton size="sm" leftIcon={<DownloadIcon className="w-4 h-4 text-white" />}>
-              Download Full Stack PDF
+              Download Resume PDF
             </PrimaryButton>
           </a>
         </div>
