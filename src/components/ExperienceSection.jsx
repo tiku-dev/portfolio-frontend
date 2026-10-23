@@ -1,8 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { getResumeData, getResumePdfDownloadUrl } from '../api/client';
-import { DownloadIcon, RefreshIcon } from './icons';
-import { PrimaryButton, SecondaryButton } from './Button';
+import { DownloadIcon } from './icons';
+import { PrimaryButton } from './Button';
 import { ExperienceSkeleton } from './Skeleton';
+
+function formatExperienceDate(dateStr) {
+  if (!dateStr) return '';
+  if (!dateStr.includes('-')) return dateStr;
+  try {
+    const parts = dateStr.split('-');
+    if (parts.length >= 2) {
+      const year = parts[0];
+      const month = parseInt(parts[1], 10);
+      const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      return `${monthNames[month - 1] || ''} ${year}`.trim();
+    }
+  } catch {
+    return dateStr;
+  }
+  return dateStr;
+}
 
 export function ExperienceSection() {
   const [experiences, setExperiences] = useState([]);
@@ -32,7 +49,7 @@ export function ExperienceSection() {
             Full Stack Experience & Engineering Track Record
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
-            Track record in shipping user-facing web applications, designing high-throughput REST APIs, and tuning database performance.
+            Hands-on software development across Python, Django, React, Flutter, Dart and AI-assisted workflows.
           </p>
         </div>
 
@@ -68,9 +85,12 @@ export function ExperienceSection() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
                   <h3 className="text-lg font-bold text-slate-700 dark:text-slate-100">
                     {exp.role} <span className="text-orange-500 font-semibold">@ {exp.company}</span>
+                    {exp.location && (
+                      <span className="text-xs text-slate-400 font-normal ml-2">({exp.location})</span>
+                    )}
                   </h3>
                   <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-900 self-start sm:self-auto">
-                    {exp.start_date} &mdash; {exp.is_current ? 'Present' : exp.end_date}
+                    {formatExperienceDate(exp.start_date)} &mdash; {exp.is_current ? 'Present' : formatExperienceDate(exp.end_date)}
                   </span>
                 </div>
 
@@ -95,10 +115,10 @@ export function ExperienceSection() {
                   <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100 dark:border-slate-800/80">
                     {exp.tags.map((t) => (
                       <span
-                        key={t.name}
+                        key={t.name || t}
                         className="px-2.5 py-0.5 rounded-lg text-[11px] font-medium bg-slate-50 dark:bg-slate-900 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-800"
                       >
-                        {t.name}
+                        {t.name || t}
                       </span>
                     ))}
                   </div>
@@ -106,6 +126,41 @@ export function ExperienceSection() {
               </div>
             </div>
           ))
+        )}
+
+        {/* Education Subsection from Resume */}
+        {!loading && education && education.length > 0 && (
+          <div className="pt-6">
+            <div className="text-xs font-bold uppercase tracking-wider text-orange-500 mb-4">
+              Education
+            </div>
+            {education.map((edu) => (
+              <div key={edu.id} className="relative flex items-start gap-4 sm:gap-6 group">
+                <div className="relative z-10 w-7 h-7 sm:w-10 sm:h-10 rounded-2xl bg-orange-50 dark:bg-orange-950/40 border-2 border-orange-500 flex items-center justify-center text-orange-600 font-bold shrink-0 text-xs shadow-xs group-hover:scale-110 group-hover:bg-orange-500 group-hover:text-white transition-all duration-300">
+                  🎓
+                </div>
+
+                <div className="flex-1 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-7 shadow-sm group-hover:border-orange-300 dark:group-hover:border-orange-800/80 group-hover:-translate-y-1 group-hover:shadow-lg transition-all duration-300">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
+                    <h3 className="text-lg font-bold text-slate-700 dark:text-slate-100">
+                      {edu.degree}
+                    </h3>
+                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-900 self-start sm:self-auto">
+                      {edu.start_year ? `${edu.start_year} &mdash; ` : ''}{edu.end_year ? (edu.end_year > 2024 ? `Expected ${edu.end_year}` : edu.end_year) : 'Present'}
+                    </span>
+                  </div>
+                  <p className="text-sm font-semibold text-orange-500 mb-2">
+                    {edu.institution}
+                  </p>
+                  {edu.details && (
+                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                      {edu.details}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </section>
