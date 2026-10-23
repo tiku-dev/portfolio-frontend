@@ -29,22 +29,22 @@ export function ExperienceSection() {
             Career Timeline
           </span>
           <h2 className="text-3xl font-extrabold text-slate-700 dark:text-slate-100 tracking-tight mt-1">
-            Work Experience & Systems Track Record
+            Full Stack Experience & Engineering Track Record
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
-            Track record in leading backend initiatives, high-throughput microservices, and database tuning.
+            Track record in shipping user-facing web applications, designing high-throughput REST APIs, and tuning database performance.
           </p>
         </div>
 
         {/* Dynamic PDF Trigger */}
         <div className="flex items-center gap-3">
           <a
-            href={getResumePdfDownloadUrl('backend')}
+            href={getResumePdfDownloadUrl('fullstack')}
             target="_blank"
             rel="noreferrer"
           >
             <PrimaryButton size="sm" leftIcon={<DownloadIcon className="w-4 h-4 text-white" />}>
-              Download Backend PDF
+              Download Full Stack PDF
             </PrimaryButton>
           </a>
         </div>

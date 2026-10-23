@@ -33,11 +33,11 @@ export function TelemetryRibbon() {
                 <ActivityIcon className="w-5 h-5" />
               </span>
               <h2 className="text-xl font-bold text-slate-700 dark:text-slate-200">
-                Live Backend Telemetry
+                Live Full Stack Telemetry
               </h2>
             </div>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
-              Real-time metrics emitted directly by the Django telemetry middleware and Redis cache.
+              Real-time metrics measuring client web sessions, API round-trip latency, and infrastructure health.
             </p>
           </div>
 
@@ -71,25 +71,25 @@ export function TelemetryRibbon() {
 
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/60 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
               <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                Avg Backend Latency
+                Avg Response Latency
               </span>
               <div className="text-2xl font-extrabold text-orange-500 mt-1">
                 {stats?.average_response_time_ms ? `${stats.average_response_time_ms}ms` : '18.4ms'}
               </div>
               <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-0.5 block">
-                Measured by middleware
+                Measured end-to-end
               </span>
             </div>
 
             <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-900/60 border border-slate-100 dark:border-slate-800/60 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
               <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                Unique Visitors
+                Active Client Visitors
               </span>
               <div className="text-2xl font-extrabold text-slate-800 dark:text-slate-100 mt-1">
-                {stats?.unique_visitors_est?.toLocaleString() || '1,340'}
+                {stats?.unique_visitors_est?.toLocaleString() || '1,840'}
               </div>
               <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-0.5 block">
-                SHA-256 Anonymized IPs
+                SHA-256 Anonymized Sessions
               </span>
             </div>
 
@@ -101,7 +101,7 @@ export function TelemetryRibbon() {
                 {stats?.uptime_status || 'Operational 🟢'}
               </div>
               <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-0.5 block">
-                Django + DB + Redis
+                React + Django + Redis
               </span>
             </div>
           </div>

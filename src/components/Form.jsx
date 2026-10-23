@@ -196,7 +196,7 @@ export function StandardForm({ onSubmit, onReset, isSubmitting = false }) {
       <div>
         <h3 className="text-xl font-bold text-slate-700 dark:text-slate-200">Contact & Inquiry</h3>
         <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-          Have an engineering project or role? Send a direct transmission to the backend.
+          Have an engineering project, full stack role, or architecture challenge? Send a direct transmission.
         </p>
       </div>
 

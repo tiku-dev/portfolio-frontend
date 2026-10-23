@@ -69,7 +69,7 @@ export function ContactSection() {
             Start a Technical Conversation
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            Have an engineering challenge, distributed systems problem, or role to discuss?
+            Have an engineering challenge, full stack product build, or senior role to discuss?
           </p>
         </div>
 
@@ -126,7 +126,7 @@ export function ContactSection() {
           <InputField
             label="Subject"
             name="subject"
-            placeholder="e.g. Distributed backend role / Systems architecture"
+            placeholder="e.g. Senior Full Stack role / React & Django architecture"
             value={formData.subject}
             onChange={handleChange}
             required

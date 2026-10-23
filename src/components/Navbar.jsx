@@ -9,9 +9,9 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate,
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { id: 'projects', label: 'Case Studies', mobileLabel: 'Case Studies & Projects' },
-    { id: 'telemetry', label: 'Live Telemetry', mobileLabel: 'Live Telemetry & Stats' },
-    { id: 'experience', label: 'Experience', mobileLabel: 'Career Experience Timeline' },
+    { id: 'projects', label: 'Case Studies', mobileLabel: 'Full Stack Case Studies' },
+    { id: 'telemetry', label: 'Live Telemetry', mobileLabel: 'Live System Telemetry' },
+    { id: 'experience', label: 'Experience', mobileLabel: 'Career & Track Record' },
     { id: 'contact', label: 'Contact', mobileLabel: 'Contact Pipeline' },
   ];
 
@@ -50,13 +50,13 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate,
               λ
             </div>
             <span className="font-bold text-lg text-slate-800 dark:text-slate-100 tracking-tight">
-              Backend<span className="text-orange-500">.io</span>
+              FullStack<span className="text-orange-500">.io</span>
             </span>
           </a>
 
-          {/* Live Backend Indicator Badge */}
+          {/* Live Full Stack Indicator Badge */}
           <div
-            title={`Backend status: ${health.status} (DB: ${health.database})`}
+            title={`Full stack status: ${health.status} (DB: ${health.database})`}
             className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400"
           >
             <span
@@ -64,7 +64,7 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate,
                 isHealthy ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
               }`}
             />
-            <span>{isHealthy ? 'API Online' : 'API Standby'}</span>
+            <span>{isHealthy ? 'Full Stack API Online' : 'API Standby'}</span>
           </div>
         </div>
 
@@ -126,35 +126,43 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate,
 
             {resumeDropdown && (
               <div
-                className="absolute right-0 mt-2 w-52 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2 z-50 text-xs font-medium animate-slide-down"
+                className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl py-2 z-50 text-xs font-medium animate-slide-down"
                 onMouseLeave={() => setResumeDropdown(false)}
               >
                 <div className="px-3 py-1.5 text-slate-400 dark:text-slate-500 uppercase tracking-wider text-[10px]">
                   Generate Tailored PDF
                 </div>
                 <a
+                  href={getResumePdfDownloadUrl('fullstack')}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600"
+                >
+                  ⚡ Full Stack Focus PDF
+                </a>
+                <a
+                  href={getResumePdfDownloadUrl('frontend')}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="block px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600"
+                >
+                  🎨 Frontend & UI Systems PDF
+                </a>
+                <a
                   href={getResumePdfDownloadUrl('backend')}
                   target="_blank"
                   rel="noreferrer"
                   className="block px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600"
                 >
-                  ⚡ Backend Focus PDF
-                </a>
-                <a
-                  href={getResumePdfDownloadUrl('devops')}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="block px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600"
-                >
-                  ☁️ DevOps & Cloud PDF
+                  ⚙️ Backend & Architecture PDF
                 </a>
                 <a
                   href={getResumePdfDownloadUrl()}
                   target="_blank"
                   rel="noreferrer"
-                  className="block px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600"
+                  className="block px-3 py-2 text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600 border-t border-slate-100 dark:border-slate-800 mt-1 pt-2"
                 >
-                  📄 Full Comprehensive CV
+                  📄 Comprehensive CV
                 </a>
               </div>
             )}
@@ -165,7 +173,7 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate,
         <div className="flex md:hidden items-center gap-2">
           <PrimaryButton
             size="sm"
-            onClick={() => window.open(getResumePdfDownloadUrl('backend'), '_blank')}
+            onClick={() => window.open(getResumePdfDownloadUrl('fullstack'), '_blank')}
             leftIcon={<DownloadIcon className="w-3.5 h-3.5 text-white" />}
           >
             PDF
@@ -187,7 +195,7 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate,
         <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-3 pb-6 space-y-4 shadow-xl animate-slide-down">
           {/* Status badge in mobile menu */}
           <div className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800/80 text-xs">
-            <span className="text-slate-500 dark:text-slate-400">Backend API Status:</span>
+            <span className="text-slate-500 dark:text-slate-400">Full Stack System Status:</span>
             <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-600 dark:text-emerald-400">
               <span className={`w-2 h-2 rounded-full ${isHealthy ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
               {isHealthy ? 'Operational 🟢' : 'Standby 🟡'}

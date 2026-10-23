@@ -1,7 +1,7 @@
 {
-  "short_name": "Backend.io",
-  "name": "Backend.io - Systems & Distributed Architecture",
-  "description": "High-Performance Distributed Systems & Backend Engineering Portfolio",
+  "short_name": "FullStack.io",
+  "name": "FullStack.io - Full Stack Systems & Product Engineering",
+  "description": "Full Stack Software Engineering Portfolio featuring reactive React/TS frontends and distributed Python/Django backends.",
   "icons": [
     {
       "src": "/pwa-icon.svg",
@@ -17,4 +17,3 @@
   "orientation": "portrait-primary",
   "categories": ["developer", "productivity", "utilities"]
 }
-

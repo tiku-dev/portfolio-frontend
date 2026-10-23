@@ -4,18 +4,20 @@ import { TerminalIcon, ServerIcon } from './icons';
 
 export function Hero({ onOpenTerminal, bio }) {
   const profileName = bio?.full_name || 'Alex Mercer';
-  const headline = bio?.headline || 'Senior Backend & Distributed Systems Engineer';
+  const headline = bio?.headline || 'Senior Full Stack & Systems Engineer';
   const summary =
     bio?.summary ||
-    'Architecting high-throughput event pipelines, resilient microservices, and database-optimized APIs with Django, PostgreSQL, Redis, and Celery.';
+    'Building end-to-end web applications — crafting reactive, polished React & TypeScript user interfaces backed by resilient Django, PostgreSQL, and distributed cloud systems.';
 
   const techStack = [
-    { name: 'Django 5.x', category: 'Framework' },
+    { name: 'React 19 & Next.js', category: 'Frontend' },
+    { name: 'TypeScript', category: 'Frontend' },
+    { name: 'Tailwind CSS', category: 'Frontend' },
+    { name: 'Django & Python', category: 'Backend' },
     { name: 'PostgreSQL', category: 'Database' },
     { name: 'Redis Streams', category: 'Caching & Queues' },
-    { name: 'Celery Workers', category: 'Async Tasks' },
-    { name: 'Docker & K8s', category: 'DevOps' },
-    { name: 'Django REST / OpenAPI', category: 'API Design' },
+    { name: 'REST & WebSockets', category: 'API Design' },
+    { name: 'Docker & DevOps', category: 'DevOps' },
   ];
 
   return (
@@ -28,7 +30,7 @@ export function Hero({ onOpenTerminal, bio }) {
         <div className="animate-fade-in-up">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800/60 text-orange-700 dark:text-orange-300 text-xs font-semibold shadow-xs hover:scale-105 transition-transform duration-300">
             <span className="w-2 h-2 rounded-full bg-orange-500 animate-ping" />
-            <span>Available for Senior Backend & Staff Roles</span>
+            <span>Available for Senior Full Stack & Lead Roles</span>
           </div>
         </div>
 
@@ -50,7 +52,7 @@ export function Hero({ onOpenTerminal, bio }) {
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 pt-2 w-full max-w-sm sm:max-w-none mx-auto animate-fade-in-up [animation-delay:300ms]">
           <a href="#projects" className="w-full sm:w-auto">
             <PrimaryButton size="lg" fullWidth leftIcon={<ServerIcon className="w-5 h-5 text-white" />}>
-              Explore Case Studies
+              Explore Full Stack Projects
             </PrimaryButton>
           </a>
 
@@ -67,7 +69,7 @@ export function Hero({ onOpenTerminal, bio }) {
         {/* Tech Stack Competencies with Hover Lift */}
         <div className="pt-8 border-t border-slate-200/80 dark:border-slate-800/80 animate-fade-in-up [animation-delay:450ms]">
           <p className="text-xs uppercase tracking-wider font-semibold text-slate-400 dark:text-slate-500 mb-4">
-            Production Core Competencies
+            Full Stack Core Competencies
           </p>
           <div className="flex flex-wrap justify-center gap-2">
             {techStack.map((tech) => (

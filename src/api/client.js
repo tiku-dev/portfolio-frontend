@@ -37,54 +37,59 @@ export async function getProjects(tag = null) {
     const data = await request(`/api/v1/projects/${query}`);
     return data.results || data;
   } catch {
-    // High-fidelity fallback case studies matching Django seed data
+    // High-fidelity fallback full stack case studies matching Django seed data
     return [
       {
         id: 1,
-        title: 'High-Throughput Distributed Event Streamer',
-        slug: 'distributed-event-streamer',
-        tagline: 'Real-time webhook and audit stream processing 20M+ daily events with guaranteed idempotency',
-        problem_statement: 'Third-party integrations caused burst traffic spikes that overwhelmed downstream relational databases, leading to deadlocks and dropped event deliveries during peak hours.',
-        architecture_overview: 'Architected a decoupled ingestion pipeline using Django REST Framework, Redis Streams, and Celery worker pools. Implemented distributed idempotency keys via Redis SETNX and dynamic backpressure throttling.',
+        title: 'Real-Time Collaborative Analytics Platform',
+        slug: 'collaborative-analytics-platform',
+        tagline: 'Full-stack reactive analytics dashboard with interactive data exploration, live WebSockets, and sub-30ms P99 latency',
+        problem_statement: 'Data teams suffered from fragmented analytical dashboards with slow 2-3 second query refreshes and disconnected user collaboration tools.',
+        architecture_overview: 'Engineered an end-to-end full stack platform: responsive React 19 and TypeScript frontend with optimistic UI updates and Tailwind CSS, backed by a high-throughput Django REST API with Redis Streams for live collaboration and PostgreSQL for partitioned analytical storage.',
         key_achievements: [
-          'Zero event loss during downstream database maintenance windows',
-          'Maintained sub-25ms P99 API ingestion latency under 15,000 req/sec loads',
-          'Reduced database connection pool exhaustion by 90% via connection pooling',
+          'Engineered reactive charting UI achieving a 99/100 Google Lighthouse Core Web Vitals score',
+          'Delivered real-time multiplayer cursor and filtering updates at sub-30ms latency via Redis Streams',
+          'Reduced server query load by 65% through intelligent client-side query caching and SWR',
         ],
         metrics: [
-          { id: 1, label: 'Throughput', value: '15,000 req/s', description: 'Peak ingestion capacity' },
-          { id: 2, label: 'P99 Latency', value: '24ms', description: 'Measured across 50M payloads' },
-          { id: 3, label: 'Cost Reduction', value: '40%', description: 'Optimized Redis memory footprint' },
+          { id: 1, label: 'Lighthouse Score', value: '99/100', description: 'Core Web Vitals performance' },
+          { id: 2, label: 'Live Latency', value: '28ms', description: 'Real-time WebSocket & Redis sync' },
+          { id: 3, label: 'Active Users', value: '120k+', description: 'Monthly active full stack users' },
         ],
         tags: [
+          { name: 'React', slug: 'react', color: '#61DAFB' },
+          { name: 'TypeScript', slug: 'typescript', color: '#3178C6' },
+          { name: 'Tailwind CSS', slug: 'tailwind', color: '#38BDF8' },
           { name: 'Django', slug: 'django', color: '#092E20' },
           { name: 'Python', slug: 'python', color: '#3776AB' },
-          { name: 'Redis', slug: 'redis', color: '#DC382D' },
-          { name: 'Celery', slug: 'celery', color: '#37814A' },
           { name: 'PostgreSQL', slug: 'postgresql', color: '#4169E1' },
+          { name: 'Redis', slug: 'redis', color: '#DC382D' },
         ],
         github_url: 'https://github.com/octocat/Spoon-Knife',
         demo_url: 'https://httpbin.org/status/200',
         health_status: 'healthy',
-        github_stars: 342,
+        github_stars: 485,
       },
       {
         id: 2,
-        title: 'Scalable Multi-Tenant SaaS Engine',
+        title: 'Scalable Multi-Tenant SaaS Workspace',
         slug: 'multi-tenant-saas-core',
-        tagline: 'Schema-isolated multi-tenant Django architecture with automated onboarding and tenant metering',
-        problem_statement: 'Enterprise B2B clients required strict data isolation, compliance with data residency laws, and dedicated resource allocation while maintaining a unified codebase.',
-        architecture_overview: 'Engineered schema-based multi-tenancy utilizing PostgreSQL schemas and custom Django middleware. Built dynamic tenant routing, automated database schema migrations per tenant, and Stripe metered billing webhooks.',
+        tagline: 'End-to-end B2B SaaS platform with customizable React dashboard, automated tenant onboarding, and schema-isolated APIs',
+        problem_statement: 'Enterprise B2B clients required custom white-label interfaces, strict data residency isolation, and dedicated resource allocation while maintaining a single unified codebase.',
+        architecture_overview: 'Architected a unified full stack SaaS architecture: modular React frontend with dynamic theme tokens and role-based views, paired with schema-isolated multi-tenant Django backend and Stripe metered billing webhooks.',
         key_achievements: [
-          'Isolated 200+ distinct enterprise customer databases on a single cluster',
-          'Automated tenant provisioning pipeline in under 3.5 seconds',
-          'Zero cross-tenant data leakage verified by independent security audits',
+          'Isolated 200+ distinct enterprise customer databases on a single cluster without cross-tenant data leakage',
+          'Automated tenant provisioning pipeline in under 3.5 seconds from checkout to active workspace',
+          'Built accessible WCAG 2.1 AA compliant UI component system with dark/light theme support',
         ],
         metrics: [
           { id: 4, label: 'Provisioning Time', value: '3.5s', description: 'Stripe webhook to live tenant' },
           { id: 5, label: 'Active Tenants', value: '200+', description: 'Isolated PostgreSQL schemas' },
+          { id: 6, label: 'UI Accessibility', value: '100%', description: 'WCAG 2.1 AA compliance' },
         ],
         tags: [
+          { name: 'React', slug: 'react', color: '#61DAFB' },
+          { name: 'TypeScript', slug: 'typescript', color: '#3178C6' },
           { name: 'Django', slug: 'django', color: '#092E20' },
           { name: 'PostgreSQL', slug: 'postgresql', color: '#4169E1' },
           { name: 'Docker', slug: 'docker', color: '#2496ED' },
@@ -93,7 +98,7 @@ export async function getProjects(tag = null) {
         github_url: 'https://github.com/octocat/Hello-World',
         demo_url: 'https://httpbin.org/status/200',
         health_status: 'healthy',
-        github_stars: 190,
+        github_stars: 320,
       },
     ];
   }
@@ -110,7 +115,7 @@ export async function pingProject(slug) {
     return {
       status: 'healthy',
       http_code: 200,
-      latency_ms: 38.4,
+      latency_ms: 28.4,
       target_url: 'https://demo.portfolio.dev',
       checked_at: new Date().toISOString(),
     };
@@ -122,13 +127,14 @@ export async function getProjectTags() {
     return await request('/api/v1/projects/tags/');
   } catch {
     return [
+      { name: 'React', slug: 'react', category: 'frontend' },
+      { name: 'TypeScript', slug: 'typescript', category: 'frontend' },
+      { name: 'Tailwind', slug: 'tailwind', category: 'frontend' },
       { name: 'Django', slug: 'django', category: 'backend' },
       { name: 'Python', slug: 'python', category: 'backend' },
       { name: 'PostgreSQL', slug: 'postgresql', category: 'database' },
       { name: 'Redis', slug: 'redis', category: 'database' },
-      { name: 'Celery', slug: 'celery', category: 'backend' },
       { name: 'Docker', slug: 'docker', category: 'devops' },
-      { name: 'Kubernetes', slug: 'kubernetes', category: 'devops' },
     ];
   }
 }
@@ -141,46 +147,47 @@ export async function getResumeData() {
     return {
       profile: {
         full_name: 'Alex Mercer',
-        headline: 'Senior Backend & Distributed Systems Engineer',
-        summary: 'Backend Engineer specializing in resilient distributed systems, asynchronous event-driven pipelines, and scalable API architectures using Django, PostgreSQL, and Redis.',
+        headline: 'Senior Full Stack & Systems Engineer',
+        summary: 'Full Stack Engineer with deep expertise across modern web applications — crafting reactive, polished React & TypeScript user interfaces and architecting resilient, distributed Django, PostgreSQL, and Redis backend infrastructure.',
         email: 'alex.mercer.eng@example.com',
         location: 'London, UK (Open to Global Remote)',
         github_url: 'https://github.com/octocat',
         linkedin_url: 'https://linkedin.com/in/octocat',
         available_for_hire: true,
-        availability_notice: 'Available for Senior Backend / Staff roles',
+        availability_notice: 'Available for Senior Full Stack & Lead roles',
       },
       experiences: [
         {
           id: 1,
           company: 'CloudScale Systems',
-          role: 'Lead Backend Engineer',
+          role: 'Lead Full Stack Engineer',
           location: 'Remote',
           start_date: '2023-01-01',
           is_current: true,
-          summary: 'Leading the core backend team in designing scalable microservices and data pipelines.',
+          summary: 'Leading cross-functional engineering across modern web client applications and high-throughput backend services.',
           achievements: [
-            'Architected high-throughput ingestion microservice serving 10M+ daily events using Django and Redis',
-            'Spearheaded database query optimization initiative, reducing slow query occurrences by 75%',
-            'Mentored 6 backend engineers and established standard CI/CD and automated testing guidelines',
+            'Spearheaded redesign of customer web app into a high-performance React & TypeScript SPA with sub-second page loads',
+            'Architected high-throughput ingestion microservice serving 10M+ daily events using Django, Celery, and Redis',
+            'Implemented design system and component library, improving developer velocity across 4 feature squads by 40%',
+            'Reduced client-side bundle size by 35% through tree-shaking and dynamic code-splitting',
           ],
-          tags: [{ name: 'Django' }, { name: 'Python' }, { name: 'PostgreSQL' }, { name: 'Redis' }],
+          tags: [{ name: 'React' }, { name: 'TypeScript' }, { name: 'Django' }, { name: 'PostgreSQL' }, { name: 'Redis' }],
         },
         {
           id: 2,
           company: 'NexTech Solutions',
-          role: 'Backend Software Engineer',
+          role: 'Full Stack Software Engineer',
           location: 'London, UK',
           start_date: '2021-03-01',
           end_date: '2022-12-31',
           is_current: false,
-          summary: 'Built core REST APIs, payment integrations, and background worker queues.',
+          summary: 'Built end-to-end features, payment checkout flows, client dashboards, and async processing queues.',
           achievements: [
-            'Integrated Stripe Billing API with webhook signature verification and idempotent charge handling',
-            'Implemented Redis caching layer, dropping average response latency from 180ms to 28ms',
-            'Authored automated test suite reaching 88% branch coverage',
+            'Built responsive React customer dashboard with real-time billing metrics and Stripe subscription webhooks',
+            'Implemented Redis caching and query indexing layer, dropping average API response latency from 180ms to 28ms',
+            'Authored end-to-end and unit test suites across frontend and backend reaching 90% branch coverage',
           ],
-          tags: [{ name: 'Django' }, { name: 'Python' }, { name: 'PostgreSQL' }, { name: 'Celery' }],
+          tags: [{ name: 'React' }, { name: 'JavaScript' }, { name: 'Django' }, { name: 'Python' }, { name: 'PostgreSQL' }],
         },
       ],
       education: [
@@ -223,13 +230,13 @@ export async function runTerminalCommand(command) {
       return {
         output: [
           '===========================================================',
-          '               PORTFOLIO DEVELOPER CONSOLE (CLIENT MODE)  ',
+          '            FULLSTACK DEVELOPER CONSOLE (CLIENT MODE)     ',
           '===========================================================',
           'Commands:',
           '  help                           Show command list',
           '  whoami                         Display engineer bio',
-          '  skills --tree                  Render skills ASCII tree',
-          '  projects                       List projects & metrics',
+          '  skills --tree                  Render full stack skills tree',
+          '  projects                       List full stack projects',
           '  uptime                         Show system telemetry',
           '===========================================================',
         ].join('\n'),
@@ -238,13 +245,31 @@ export async function runTerminalCommand(command) {
     }
     if (cmd === 'whoami') {
       return {
-        output: 'Alex Mercer - Senior Backend & Distributed Systems Engineer\nLocation: London, UK | Status: 🟢 Open to Senior Roles',
+        output: 'Alex Mercer - Senior Full Stack & Systems Engineer\nSpecialization: React, TypeScript, Python, Django & Distributed Systems\nLocation: London, UK | Status: 🟢 Open to Senior & Lead Roles',
         status: 'ok',
       };
     }
     if (cmd.includes('skills')) {
       return {
-        output: '└── Core Competencies\n    ├── BACKEND\n    │   ├── Django\n    │   ├── Python\n    │   └── Celery\n    └── DATABASE\n        ├── PostgreSQL\n        └── Redis',
+        output: [
+          '└── Full Stack Competencies',
+          '    ├── FRONTEND & UI',
+          '    │   ├── React 19 & Next.js',
+          '    │   ├── TypeScript',
+          '    │   ├── Tailwind CSS & Animations',
+          '    │   └── PWA & Web Vitals',
+          '    ├── BACKEND & APIS',
+          '    │   ├── Django & Python',
+          '    │   ├── Django REST / OpenAPI',
+          '    │   ├── Celery Workers',
+          '    │   └── Node.js & WebSockets',
+          '    ├── DATABASE & STREAMS',
+          '    │   ├── PostgreSQL (Partitioning & Tuning)',
+          '    │   └── Redis Streams & Caching',
+          '    └── DEVOPS & CLOUD',
+          '        ├── Docker & Kubernetes',
+          '        └── CI/CD Pipelines',
+        ].join('\n'),
         status: 'ok',
       };
     }
@@ -258,13 +283,13 @@ export async function getTelemetryStats() {
     return await request('/api/v1/telemetry/stats/');
   } catch {
     return {
-      total_requests_served: 4820,
+      total_requests_served: 6420,
       average_response_time_ms: 18.4,
-      unique_visitors_est: 1340,
+      unique_visitors_est: 1840,
       uptime_status: 'Operational 🟢',
       top_endpoints: [
-        { path: '/api/v1/projects/', count: 2100 },
-        { path: '/api/v1/resume/pdf/', count: 890 },
+        { path: '/api/v1/projects/', count: 3200 },
+        { path: '/api/v1/resume/pdf/', count: 1250 },
       ],
     };
   }
@@ -292,4 +317,3 @@ export async function getBackendHealth() {
     return { status: 'offline', database: 'unknown' };
   }
 }
-

@@ -14,10 +14,11 @@ export function ProjectsSection() {
 
   const filterTags = [
     { label: 'All Projects', slug: 'all' },
-    { label: 'Django', slug: 'django' },
-    { label: 'Redis', slug: 'redis' },
+    { label: 'React & TS', slug: 'react' },
+    { label: 'Django / Python', slug: 'django' },
     { label: 'PostgreSQL', slug: 'postgresql' },
-    { label: 'Docker', slug: 'docker' },
+    { label: 'Redis Streams', slug: 'redis' },
+    { label: 'Docker & Cloud', slug: 'docker' },
   ];
 
   useEffect(() => {
@@ -56,13 +57,13 @@ export function ProjectsSection() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-slate-200/80 dark:border-slate-800/80">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-orange-500">
-            Systems & Case Studies
+            Full Stack Case Studies
           </span>
           <h2 className="text-3xl font-extrabold text-slate-700 dark:text-slate-100 tracking-tight mt-1">
-            Engineered Projects & Micro-Demos
+            Production Applications & Reactive Systems
           </h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 max-w-xl">
-            Real backend case studies with measurable throughput, latency benchmarks, and active health checks.
+            End-to-end software engineering: modern reactive web interfaces, optimistic updates, and resilient backend microservices.
           </p>
         </div>
 

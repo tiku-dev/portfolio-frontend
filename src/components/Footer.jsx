@@ -11,10 +11,10 @@ export function Footer({ onOpenTerminal }) {
           </div>
           <div>
             <p className="text-sm font-bold text-slate-700 dark:text-slate-200">
-              Senior Portfolio Backend & Frontend
+              FullStack<span className="text-orange-500">.io</span> &mdash; Full Stack Systems & Product Engineering
             </p>
             <p className="text-xs text-slate-400">
-              Powered by Django REST Framework, PostgreSQL, Redis & React.
+              Architected with React 19, TypeScript, Tailwind CSS, Django REST, PostgreSQL & Redis.
             </p>
           </div>
         </div>
