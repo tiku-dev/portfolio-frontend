@@ -3,7 +3,7 @@ import { PrimaryButton, SecondaryButton } from './Button';
 import { TerminalIcon, ServerIcon } from './icons';
 
 export function Hero({ onOpenTerminal, bio }) {
-  const profileName = bio?.full_name || 'Alex Mercer';
+  const profileName = bio?.full_name || 'Tiku Faith';
   const headline = bio?.headline || 'Senior Full Stack & Systems Engineer';
   const summary =
     bio?.summary ||

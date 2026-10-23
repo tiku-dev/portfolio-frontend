@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 150" width="100%" height="100%">
+  <defs>
+    <!-- Gradient referencing UI and Backend stacks -->
+    <linearGradient id="primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#61DAFB"/>
+      <stop offset="100%" stop-color="#306998"/>
+    </linearGradient>
+    
+    <!-- Accent gradient -->
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD43B"/>
+      <stop offset="100%" stop-color="#F7DF1E"/>
+    </linearGradient>
+
+    <!-- Subtle drop shadow for the terminal window -->
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-opacity="0.4" flood-color="#000000"/>
+    </filter>
+  </defs>
+
+  <!-- Editor / Terminal Background -->
+  <rect x="10" y="10" width="480" height="130" rx="12" ry="12" fill="#1E1E1E" filter="url(#shadow)" />
+
+  <!-- Window Control Buttons -->
+  <circle cx="35" cy="35" r="7" fill="#FF5F56" />
+  <circle cx="58" cy="35" r="7" fill="#FFBD2E" />
+  <circle cx="81" cy="35" r="7" fill="#27C93F" />
+
+  <!-- Terminal Prompt Indicator -->
+  <text x="35" y="100" font-family="'Fira Code', 'Consolas', 'Courier New', monospace" font-size="46" font-weight="bold" fill="url(#primary)">&gt;_</text>
+  
+  <!-- "tiku" text -->
+  <text x="125" y="100" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="54" font-weight="800" fill="#FFFFFF" letter-spacing="-1">tiku</text>
+  
+  <!-- "dev" text -->
+  <text x="235" y="100" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="54" font-weight="300" fill="url(#accent)">dev</text>
+  
+  <!-- Blinking Cursor Animation -->
+  <rect x="335" y="60" width="22" height="46" fill="#61DAFB">
+    <animate attributeName="opacity" values="1;0;1" dur="1.2s" repeatCount="indefinite" />
+  </rect>
+</svg>

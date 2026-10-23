@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CloseIcon, DownloadIcon, CheckCircleIcon, ShareIcon } from './icons';
 import { PrimaryButton, SecondaryButton } from './Button';
+import logoSvg from '../assets/dev-tiku.svg';
 
 export function InstallAppModal({ isOpen, onClose }) {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -92,15 +93,17 @@ export function InstallAppModal({ isOpen, onClose }) {
 
         {/* Header with App Icon */}
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-orange-600 to-orange-400 text-white font-extrabold flex items-center justify-center text-2xl shadow-lg shadow-orange-500/25 shrink-0">
-            λ
-          </div>
+          <img
+            src="/pwa-icon.svg"
+            alt="tiku.dev app icon"
+            className="w-14 h-14 rounded-2xl shadow-md shrink-0 object-contain"
+          />
           <div>
             <span className="text-[11px] font-bold uppercase tracking-wider text-orange-500">
               Download Web App
             </span>
             <h2 className="text-xl font-bold text-slate-700 dark:text-slate-100 leading-tight">
-              Install FullStack.io
+              Install tiku.dev
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Available for PC & Mobile

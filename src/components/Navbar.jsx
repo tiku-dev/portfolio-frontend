@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, PrimaryButton } from './Button';
 import { getBackendHealth, getResumePdfDownloadUrl } from '../api/client';
 import { TerminalIcon, DownloadIcon, MenuIcon, CloseIcon, DeviceMobileIcon } from './icons';
+import logoSvg from '../assets/dev-tiku.svg';
 
 export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate, onOpenInstall }) {
   const [health, setHealth] = useState({ status: 'checking', database: 'checking' });
@@ -44,14 +45,14 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate,
           <a
             href="#hero"
             onClick={(e) => handleLinkClick(e, 'hero')}
-            className="flex items-center gap-2 group"
+            className="flex items-center group py-1"
+            title="tiku.dev - Full Stack Engineer"
           >
-            <div className="w-9 h-9 rounded-2xl bg-orange-500 text-white font-extrabold flex items-center justify-center text-lg shadow-sm shadow-orange-500/20 group-hover:scale-105 transition-transform">
-              λ
-            </div>
-            <span className="font-bold text-lg text-slate-800 dark:text-slate-100 tracking-tight">
-              FullStack<span className="text-orange-500">.io</span>
-            </span>
+            <img
+              src={logoSvg}
+              alt="tiku.dev logo"
+              className="h-8 sm:h-9 w-auto rounded-xl shadow-xs group-hover:scale-105 transition-transform"
+            />
           </a>
 
           {/* Live Full Stack Indicator Badge */}
