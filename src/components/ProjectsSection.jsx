@@ -124,10 +124,23 @@ export function ProjectsSection({ onNavigateToCaseStudy }) {
                       )}
                     </button>
 
-                    <div className="flex items-center gap-1.5 text-xs text-slate-400">
-                      <GithubIcon className="w-3.5 h-3.5" />
-                      <span>{p.github_stars || 0}★</span>
-                    </div>
+                    {p.slug === 'tikushop' || (!p.github_url && p.demo_url) ? (
+                      <a
+                        href={p.demo_url || 'https://tikushop.com'}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-1 text-xs text-orange-500 hover:text-orange-600 font-semibold transition-colors"
+                        title="Open live website"
+                      >
+                        <ExternalLinkIcon className="w-3.5 h-3.5" />
+                        <span>tikushop.com</span>
+                      </a>
+                    ) : (
+                      <div className="flex items-center gap-1.5 text-xs text-slate-400">
+                        <GithubIcon className="w-3.5 h-3.5" />
+                        <span>{p.github_stars || 0}★</span>
+                      </div>
+                    )}
                   </div>
 
                   {/* Title & Tagline */}
@@ -171,9 +184,10 @@ export function ProjectsSection({ onNavigateToCaseStudy }) {
                 </div>
 
                 {/* Card Action Buttons: Primary & Secondary */}
-                <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800/80">
                   <a
                     href={`#/case-study/${p.slug || p.id}`}
+                    className="inline-flex shrink-0"
                     onClick={(e) => {
                       e.preventDefault();
                       if (onNavigateToCaseStudy) {
@@ -188,13 +202,19 @@ export function ProjectsSection({ onNavigateToCaseStudy }) {
                     </PrimaryButton>
                   </a>
 
-                  {p.github_url && (
-                    <a href={p.github_url} target="_blank" rel="noreferrer">
+                  {p.slug === 'tikushop' || (!p.github_url && p.demo_url) ? (
+                    <a href={p.demo_url || 'https://tikushop.com'} target="_blank" rel="noreferrer" className="inline-flex shrink-0">
+                      <SecondaryButton size="sm" leftIcon={<ExternalLinkIcon className="w-3.5 h-3.5 text-orange-500" />}>
+                        View Website
+                      </SecondaryButton>
+                    </a>
+                  ) : p.github_url ? (
+                    <a href={p.github_url} target="_blank" rel="noreferrer" className="inline-flex shrink-0">
                       <SecondaryButton size="sm" leftIcon={<GithubIcon className="w-3.5 h-3.5" />}>
                         Source
                       </SecondaryButton>
                     </a>
-                  )}
+                  ) : null}
                 </div>
               </div>
             );

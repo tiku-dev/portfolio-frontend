@@ -105,7 +105,7 @@ export function InstallAppModal({ isOpen, onClose }) {
         <div className="flex items-center gap-4">
           <img
             src="/pwa-icon.svg"
-            alt="tiku.dev app icon"
+            alt="tiku dev app icon"
             className="w-14 h-14 rounded-2xl shadow-md shrink-0 object-contain"
           />
           <div>
@@ -113,7 +113,7 @@ export function InstallAppModal({ isOpen, onClose }) {
               Download Web App
             </span>
             <h2 className="text-xl font-bold text-slate-700 dark:text-slate-100 leading-tight">
-              Install tiku.dev
+              Install tiku dev
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Available for PC & Mobile
@@ -126,7 +126,7 @@ export function InstallAppModal({ isOpen, onClose }) {
           <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 flex items-center gap-3">
             <CheckCircleIcon className="w-6 h-6 text-emerald-500 shrink-0" />
             <div className="text-sm font-medium">
-              FullStack.io has been installed! You can now launch it directly from your device.
+              tiku dev has been installed! You can now launch it directly from your device.
             </div>
           </div>
         ) : (

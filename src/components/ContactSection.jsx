@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { InputField, TextareaField } from './Form';
 import { PrimaryButton, SecondaryButton } from './Button';
 import { sendContactMessage } from '../api/client';
-import { CheckCircleIcon } from './icons';
+import { CheckCircleIcon, WhatsappIcon } from './icons';
 
 export function ContactSection() {
   const [formData, setFormData] = useState({
@@ -71,6 +71,18 @@ export function ContactSection() {
           <p className="text-sm text-slate-500 dark:text-slate-400">
             Have an engineering challenge, full stack product build, or senior role to discuss?
           </p>
+
+          <div className="pt-2">
+            <a
+              href="https://wa.me/237671486996"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-300 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 font-semibold text-xs hover:bg-emerald-100 dark:hover:bg-emerald-900/60 hover:border-emerald-400 transition-all shadow-xs hover:scale-105"
+            >
+              <WhatsappIcon className="w-4 h-4 text-emerald-500 shrink-0" />
+              {/* <span>Chat on WhatsApp: +237 671 486 996</span> */}
+            </a>
+          </div>
         </div>
 
         {responseStatus && (

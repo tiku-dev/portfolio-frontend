@@ -46,11 +46,11 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate,
             href="#hero"
             onClick={(e) => handleLinkClick(e, 'hero')}
             className="flex items-center group py-1"
-            title="tiku.dev - Full Stack Engineer"
+            title="tiku dev - Full Stack Engineer"
           >
             <img
               src={logoSvg}
-              alt="tiku.dev logo"
+              alt="tiku dev logo"
               className="h-8 sm:h-9 w-auto rounded-xl shadow-xs group-hover:scale-105 transition-transform"
             />
           </a>

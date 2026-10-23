@@ -1,5 +1,5 @@
 import React from 'react';
-import { GithubIcon, LinkedinIcon, TerminalIcon } from './icons';
+import { GithubIcon, LinkedinIcon, TerminalIcon, WhatsappIcon } from './icons';
 import logoSvg from '../assets/dev-tiku.svg';
 
 export function Footer({ onOpenTerminal }) {
@@ -9,12 +9,12 @@ export function Footer({ onOpenTerminal }) {
         <div className="flex items-center gap-3">
           <img
             src={logoSvg}
-            alt="tiku.dev logo"
+            alt="tiku dev logo"
             className="h-8 w-auto rounded-xl shadow-xs"
           />
           <div>
             <p className="text-sm font-bold text-slate-700 dark:text-slate-200">
-              tiku.dev &mdash; Full Stack Systems & Product Engineering
+              tiku dev &mdash; Full Stack Systems & Product Engineering
             </p>
             <p className="text-xs text-slate-400">
               Architected with React 19, TypeScript, Tailwind CSS, Django REST, PostgreSQL & Redis.
@@ -50,6 +50,17 @@ export function Footer({ onOpenTerminal }) {
           >
             <LinkedinIcon className="w-4 h-4" />
             <span>LinkedIn</span>
+          </a>
+
+          <a
+            href="https://wa.me/237671486996"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 hover:text-emerald-500 transition-colors"
+            title="Chat on WhatsApp (+237 671 486 996)"
+          >
+            <WhatsappIcon className="w-4 h-4 text-emerald-500" />
+            <span>WhatsApp</span>
           </a>
         </div>
       </div>
