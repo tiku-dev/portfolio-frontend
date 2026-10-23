@@ -1,5 +1,5 @@
 import React from 'react';
-import { GithubIcon, TerminalIcon } from './icons';
+import { GithubIcon, LinkedinIcon, TerminalIcon } from './icons';
 import logoSvg from '../assets/dev-tiku.svg';
 
 export function Footer({ onOpenTerminal }) {
@@ -39,7 +39,17 @@ export function Footer({ onOpenTerminal }) {
             className="flex items-center gap-1.5 hover:text-orange-500 transition-colors"
           >
             <GithubIcon className="w-4 h-4" />
-            <span>GitHub Profile</span>
+            <span>GitHub</span>
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/tiku-faith-2305103a3"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5 hover:text-orange-500 transition-colors"
+          >
+            <LinkedinIcon className="w-4 h-4" />
+            <span>LinkedIn</span>
           </a>
         </div>
       </div>

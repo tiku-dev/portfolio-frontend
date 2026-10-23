@@ -52,6 +52,16 @@ export function InstallAppModal({ isOpen, onClose }) {
     };
   }, [onClose]);
 
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    if (!isOpen || isInstalled) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen, isInstalled]);
+
   if (!isOpen || isInstalled) return null;
 
   const handleInstallClick = async () => {
@@ -74,7 +84,7 @@ export function InstallAppModal({ isOpen, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-slate-950/75 backdrop-blur-none sm:backdrop-blur-sm animate-fade-in"
       onClick={onClose}
     >
       <div

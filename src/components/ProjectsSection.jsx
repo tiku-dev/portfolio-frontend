@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { getProjects, pingProject } from '../api/client';
 import { PrimaryButton, SecondaryButton } from './Button';
-import { CaseStudyModal } from './CaseStudyModal';
 import { ActivityIcon, ExternalLinkIcon, GithubIcon, RefreshIcon } from './icons';
 import { ProjectCardSkeleton } from './Skeleton';
 
-export function ProjectsSection() {
+export function ProjectsSection({ onNavigateToCaseStudy }) {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTag, setSelectedTag] = useState('all');
-  const [activeModalProject, setActiveModalProject] = useState(null);
   const [pingStates, setPingStates] = useState({});
 
   const filterTags = [
@@ -174,12 +172,21 @@ export function ProjectsSection() {
 
                 {/* Card Action Buttons: Primary & Secondary */}
                 <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                  <PrimaryButton
-                    size="sm"
-                    onClick={() => setActiveModalProject(p)}
+                  <a
+                    href={`#/case-study/${p.slug || p.id}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (onNavigateToCaseStudy) {
+                        onNavigateToCaseStudy(p.slug || p.id);
+                      } else {
+                        window.location.hash = `#/case-study/${p.slug || p.id}`;
+                      }
+                    }}
                   >
-                    Read Case Study
-                  </PrimaryButton>
+                    <PrimaryButton size="sm">
+                      Read Case Study
+                    </PrimaryButton>
+                  </a>
 
                   {p.github_url && (
                     <a href={p.github_url} target="_blank" rel="noreferrer">
@@ -194,14 +201,6 @@ export function ProjectsSection() {
           })
         )}
       </div>
-
-      {/* Deep-dive Case Study Modal */}
-      {activeModalProject && (
-        <CaseStudyModal
-          project={activeModalProject}
-          onClose={() => setActiveModalProject(null)}
-        />
-      )}
     </section>
   );
 }

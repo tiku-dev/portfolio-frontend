@@ -150,8 +150,20 @@ export async function getProjects(tag = null) {
   }
 }
 
-export async function getProjectDetail(slug) {
-  return await request(`/api/v1/projects/${slug}/`);
+export async function getProjectDetail(slugOrId) {
+  try {
+    return await request(`/api/v1/projects/${slugOrId}/`);
+  } catch (err) {
+    try {
+      const all = await getProjects();
+      const queryStr = String(slugOrId).toLowerCase();
+      const match = all.find(
+        (p) => p.slug?.toLowerCase() === queryStr || String(p.id) === queryStr
+      );
+      if (match) return match;
+    } catch {}
+    throw err;
+  }
 }
 
 export async function pingProject(slug) {
@@ -193,56 +205,59 @@ export async function getResumeData() {
     return {
       profile: {
         full_name: 'Tiku Faith',
-        headline: 'Senior Full Stack & Systems Engineer',
-        summary: 'Full Stack Engineer with deep expertise across modern web applications — crafting reactive, polished React & TypeScript user interfaces and architecting resilient, distributed Django, PostgreSQL, and Redis backend infrastructure.',
-        email: 'tiku.dev@example.com',
-        location: 'Remote / Global',
+        headline: 'Intermediate Full-Stack Software Engineer | Python, JavaScript & Dart',
+        summary: "Intermediate full-stack software engineer with 2+ years of experience building web and mobile applications in Python, JavaScript and Dart. Shipped TikuShop, an ecommerce platform with online payments, and built an AI-powered file management app during an internship at Digimark Consulting SARL. Completing a Master's in Computer Engineering in 2027 and seeking a remote software engineering role.",
+        email: 'tikufaith10@gmail.com',
+        location: 'Bamenda, Cameroon (open to remote)',
+        phone: '+237 671 486 996',
         github_url: 'https://github.com/tiku-dev',
-        linkedin_url: 'https://linkedin.com/in/tiku-dev',
+        linkedin_url: 'https://www.linkedin.com/in/tiku-faith-2305103a3',
+        website_url: 'https://tikufaith.tikushop.com',
         available_for_hire: true,
-        availability_notice: 'Available for Senior Full Stack & Lead roles',
+        availability_notice: 'Open to Remote Software Engineering Roles',
       },
       experiences: [
         {
           id: 1,
-          company: 'CloudScale Systems',
-          role: 'Lead Full Stack Engineer',
-          location: 'Remote',
-          start_date: '2023-01-01',
-          is_current: true,
-          summary: 'Leading cross-functional engineering across modern web client applications and high-throughput backend services.',
+          company: 'Digimark Consulting SARL',
+          role: 'Software Engineering Intern',
+          location: 'Yaoundé, Cameroon',
+          start_date: 'Aug 2026',
+          end_date: 'Oct 2026',
+          is_current: false,
+          summary: 'Designed and built a smart file management app that uses AI to carry out file-management jobs described by the user.',
           achievements: [
-            'Spearheaded redesign of customer web app into a high-performance React & TypeScript SPA with sub-second page loads',
-            'Architected high-throughput ingestion microservice serving 10M+ daily events using Django, Celery, and Redis',
-            'Implemented design system and component library, improving developer velocity across 4 feature squads by 40%',
-            'Reduced client-side bundle size by 35% through tree-shaking and dynamic code-splitting',
+            'Designed and built a smart file management app that uses AI to carry out file-management jobs described by the user.',
+            'Turned user-provided instructions into automated actions on files.',
+            'Delivered the project within a two-month internship, following earlier internships at the same company.',
           ],
-          tags: [{ name: 'React' }, { name: 'TypeScript' }, { name: 'Django' }, { name: 'PostgreSQL' }, { name: 'Redis' }],
+          tags: [{ name: 'Python' }, { name: 'Django' }, { name: 'React' }, { name: 'AI' }],
         },
         {
           id: 2,
-          company: 'NexTech Solutions',
-          role: 'Full Stack Software Engineer',
-          location: 'London, UK',
-          start_date: '2021-03-01',
-          end_date: '2022-12-31',
-          is_current: false,
-          summary: 'Built end-to-end features, payment checkout flows, client dashboards, and async processing queues.',
+          company: 'Hands-on Full-Stack & Mobile Development',
+          role: 'Software Developer',
+          location: 'Bamenda, Cameroon (Remote)',
+          start_date: '2024',
+          end_date: 'Present',
+          is_current: true,
+          summary: '2+ years of hands-on experience building and shipping web and mobile applications in Python, JavaScript and Dart.',
           achievements: [
-            'Built responsive React customer dashboard with real-time billing metrics and Stripe subscription webhooks',
-            'Implemented Redis caching and query indexing layer, dropping average API response latency from 180ms to 28ms',
-            'Authored end-to-end and unit test suites across frontend and backend reaching 90% branch coverage',
+            'Built and shipped full-stack web applications with Django and React, from backend APIs to user interfaces.',
+            'Developed mobile and web features in Flutter, Dart and JavaScript.',
+            'Architected and shipped TikuShop (tikushop.com), an ecommerce platform with online payment integration and product browsing.',
           ],
-          tags: [{ name: 'React' }, { name: 'JavaScript' }, { name: 'Django' }, { name: 'Python' }, { name: 'PostgreSQL' }],
+          tags: [{ name: 'Python' }, { name: 'JavaScript' }, { name: 'Dart' }, { name: 'Django' }, { name: 'React' }, { name: 'Flutter' }],
         },
       ],
       education: [
         {
-          institution: 'University of Manchester',
-          degree: 'B.Sc. (Hons)',
-          field_of_study: 'Computer Science',
-          start_year: 2017,
-          end_year: 2020,
+          institution: 'National Higher Polytechnic Institute (NAHPI)',
+          degree: "Master's Degree",
+          field_of_study: 'Computer Engineering',
+          start_year: 2022,
+          end_year: 2027,
+          details: "Completing a Master's in Computer Engineering, Bamenda, Cameroon · Expected 2027",
         },
       ],
     };
@@ -281,9 +296,11 @@ export async function runTerminalCommand(command) {
           'Commands:',
           '  help                           Show command list',
           '  whoami                         Display engineer bio',
-          '  skills --tree                  Render full stack skills tree',
-          '  projects                       List full stack projects',
+          '  cat experience                 Print employment & engineering history',
+          '  skills --tree                  Render skills tree',
+          '  projects                       List projects & repositories',
           '  uptime                         Show system telemetry',
+          '  clear                          Clear terminal',
           '===========================================================',
         ].join('\n'),
         status: 'ok',
@@ -291,30 +308,84 @@ export async function runTerminalCommand(command) {
     }
     if (cmd === 'whoami') {
       return {
-        output: 'Tiku Faith (@tiku-dev) - Senior Full Stack & Systems Engineer\nSpecialization: React 19, TypeScript, Python, Django & Distributed Systems\nGitHub: https://github.com/tiku-dev | Status: 🟢 Open to Senior & Lead Roles',
+        output: [
+          'Name:     Tiku Faith (@tiku-dev)',
+          'Role:     Intermediate Full-Stack Software Engineer',
+          'Location: Bamenda, Cameroon (open to remote)',
+          'Email:    tikufaith10@gmail.com · Phone: +237 671 486 996',
+          'GitHub:   https://github.com/tiku-dev',
+          'LinkedIn: https://www.linkedin.com/in/tiku-faith-2305103a3',
+          'Website:  https://tikufaith.tikushop.com',
+          'Status:   🟢 Open to Remote Software Engineering Roles',
+        ].join('\n'),
+        status: 'ok',
+      };
+    }
+    if (cmd === 'cat experience' || cmd === 'experience' || cmd === 'cat resume' || cmd === 'resume') {
+      return {
+        output: [
+          '===========================================================',
+          '             TIKU FAITH – EXPERIENCE & RESUME              ',
+          '===========================================================',
+          'Name:     Tiku Faith',
+          'Location: Bamenda, Cameroon (open to remote)',
+          'Email:    tikufaith10@gmail.com · Phone: +237 671 486 996',
+          'GitHub:   https://github.com/tiku-dev',
+          'LinkedIn: https://www.linkedin.com/in/tiku-faith-2305103a3',
+          'Website:  https://tikufaith.tikushop.com',
+          '',
+          '[Summary]',
+          "Intermediate full-stack software engineer with 2+ years of experience building web and mobile applications in Python, JavaScript and Dart. Shipped TikuShop, an ecommerce platform with online payments, and built an AI-powered file management app during an internship at Digimark Consulting SARL. Completing a Master's in Computer Engineering in 2027 and seeking a remote software engineering role.",
+          '',
+          '[Technical Skills]',
+          '  • Languages: Python, JavaScript (including vanilla JS), Dart',
+          '  • Backend: Django, Django REST Framework',
+          '  • Frontend & Mobile: React.js, Flutter',
+          '  • Other: AI-assisted application development, version control with GitHub',
+          '',
+          '[Work Experience]',
+          '',
+          '▶ Software Engineering Intern @ Digimark Consulting SARL, Yaoundé, Cameroon',
+          '  Duration: Aug 2026 – Oct 2026',
+          '  Summary:  Designed and built a smart file management app that uses AI to carry out file-management jobs described by the user.',
+          '  • Designed and built a smart file management app that uses AI to carry out file-management jobs described by the user.',
+          '  • Turned user-provided instructions into automated actions on files.',
+          '  • Delivered the project within a two-month internship, following earlier internships at the same company.',
+          '',
+          '▶ Software Developer @ Hands-on Full-Stack & Mobile Development, Bamenda, Cameroon (Remote)',
+          '  Duration: 2024 – Present (2+ years hands-on experience)',
+          '  Summary:  Built and shipped web and mobile applications in Python, JavaScript and Dart.',
+          '  • Built and shipped full-stack web applications with Django and React, from backend APIs to user interfaces.',
+          '  • Developed mobile and web features in Flutter, Dart and JavaScript.',
+          '  • Engineered and launched TikuShop (tikushop.com), an ecommerce platform with online payment integration.',
+          '',
+          '[Education]',
+          "▶ Master's in Computer Engineering",
+          '  National Higher Polytechnic Institute (NAHPI), Bamenda, Cameroon (Expected 2027)',
+          '===========================================================',
+        ].join('\n'),
         status: 'ok',
       };
     }
     if (cmd.includes('skills')) {
       return {
         output: [
-          '└── Full Stack Competencies',
-          '    ├── FRONTEND & UI',
-          '    │   ├── React 19 & Next.js',
-          '    │   ├── TypeScript',
-          '    │   ├── Tailwind CSS & Animations',
-          '    │   └── PWA & Web Vitals',
-          '    ├── BACKEND & APIS',
-          '    │   ├── Django & Python',
-          '    │   ├── Django REST / OpenAPI',
-          '    │   ├── Celery Workers',
-          '    │   └── Node.js & WebSockets',
-          '    ├── DATABASE & STREAMS',
-          '    │   ├── PostgreSQL (Partitioning & Tuning)',
-          '    │   └── Redis Streams & Caching',
-          '    └── DEVOPS & CLOUD',
-          '        ├── Docker & Kubernetes',
-          '        └── CI/CD Pipelines',
+          '└── Technical Competencies (Tiku Faith)',
+          '    ├── LANGUAGES',
+          '    │   ├── Python',
+          '    │   ├── JavaScript (including vanilla JS)',
+          '    │   └── Dart',
+          '    ├── BACKEND',
+          '    │   ├── Django',
+          '    │   └── Django REST Framework',
+          '    ├── FRONTEND & MOBILE',
+          '    │   ├── React.js',
+          '    │   ├── Flutter',
+          '    │   └── Tailwind CSS',
+          '    └── OTHER & TOOLS',
+          '        ├── AI-assisted application development',
+          '        ├── GitHub / Git Version Control',
+          '        └── REST API Integration & Payments',
         ].join('\n'),
         status: 'ok',
       };

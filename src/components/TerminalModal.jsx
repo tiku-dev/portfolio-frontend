@@ -24,6 +24,16 @@ export function TerminalModal({ isOpen, onClose }) {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [history]);
 
+  // Lock body scroll while terminal is open
+  useEffect(() => {
+    if (!isOpen) return;
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalOverflow;
+    };
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   const handleExecute = async (e) => {
@@ -64,7 +74,7 @@ export function TerminalModal({ isOpen, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/75 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-slate-950/75 backdrop-blur-none sm:backdrop-blur-sm animate-fade-in"
       onClick={onClose}
     >
       <div
