@@ -5,9 +5,10 @@ import resumePdfAsset from '../assets/Tiku Faith – Software Engineer Resume.pd
  * Connects to http://127.0.0.1:8000/api/v1/ with graceful fallback data.
  */
 
-// Default to empty string so requests use relative paths through Vite's reverse proxy.
-// This allows the full app (frontend + Django backend) to work seamlessly over ngrok/tunnels without mixed content or CORS issues.
-export const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+// Production backend on Vercel with automatic local override via VITE_API_URL
+export const API_BASE_URL = (
+  import.meta.env.VITE_API_URL || 'https://portfolio-backend-five-ruby.vercel.app'
+).replace(/\/+$/, '');
 
 async function request(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;

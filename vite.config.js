@@ -13,17 +13,17 @@ export default defineConfig({
     proxy: {
       // Forward all backend API and admin requests to local Django server
       '/api': {
-        target: 'http://127.0.0.1:8000',
+        target: 'https://portfolio-backend-five-ruby.vercel.app',
         changeOrigin: true,
         secure: false,
       },
       '/admin': {
-        target: 'http://127.0.0.1:8000',
+        target: 'https://portfolio-backend-five-ruby.vercel.app',
         changeOrigin: true,
         secure: false,
       },
       '/static': {
-        target: 'http://127.0.0.1:8000',
+        target: 'https://portfolio-backend-five-ruby.vercel.app',
         changeOrigin: true,
         secure: false,
       },
