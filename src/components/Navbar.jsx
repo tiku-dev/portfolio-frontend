@@ -96,6 +96,7 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate,
           {/* Install App Prompt Button */}
           {onOpenInstall && (
             <Button
+              className="lg:hidden"
               variant="secondary"
               size="sm"
               onClick={onOpenInstall}
