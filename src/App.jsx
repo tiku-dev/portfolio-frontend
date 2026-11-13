@@ -76,26 +76,29 @@ export function App() {
     }, 50);
   };
 
-  // Automatically show PWA install prompt when user visits site (mobile & PC)
+  // Automatically show PWA install prompt ONLY ONCE to the user via pop up
   useEffect(() => {
     const isStandalone =
       window.matchMedia('(display-mode: standalone)').matches ||
       window.navigator.standalone === true;
 
-    const dismissed = sessionStorage.getItem('pwa_prompt_dismissed');
+    // Permanent flag in localStorage so the pop up only ever triggers ONCE
+    const hasPrompted = localStorage.getItem('pwa_prompt_shown_once');
 
-    // If not already running as installed app and not dismissed during this browser session
-    if (!isStandalone && !dismissed) {
+    // If not already running as installed app and hasn't been prompted before
+    if (!isStandalone && !hasPrompted) {
       const timer = setTimeout(() => {
         setInstallPromptOpen(true);
-      }, 1200);
+        // Mark as shown so it never auto-pops up again across reloads or future visits
+        localStorage.setItem('pwa_prompt_shown_once', 'true');
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, []);
 
   const handleCloseInstallPrompt = () => {
     setInstallPromptOpen(false);
-    sessionStorage.setItem('pwa_prompt_dismissed', 'true');
+    localStorage.setItem('pwa_prompt_shown_once', 'true');
   };
 
   // Smooth scroll handler for both desktop and mobile navigation clicks

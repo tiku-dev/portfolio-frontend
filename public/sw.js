@@ -1,10 +1,17 @@
 // tiku dev Portfolio Service Worker
-const CACHE_NAME = 'tiku-dev-cache-v2';
+const CACHE_NAME = 'tiku-dev-cache-v3';
 const PRECACHE_URLS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/pwa-icon.svg'
+  '/pwa-icon.svg',
+  '/pwa-icon-192.png',
+  '/pwa-icon-512.png',
+  '/pwa-icon-maskable-192.png',
+  '/pwa-icon-maskable-512.png',
+  '/apple-touch-icon.png',
+  '/favicon-32.png',
+  '/favicon-64.png'
 ];
 
 self.addEventListener('install', (event) => {

@@ -93,16 +93,16 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate,
 
         {/* Action Buttons (Desktop) */}
         <div className="hidden md:flex items-center gap-2.5">
-          {/* Install App Prompt Button */}
+          {/* Download App Trigger */}
           {onOpenInstall && (
             <Button
-              className="lg:hidden"
               variant="secondary"
               size="sm"
               onClick={onOpenInstall}
               leftIcon={<DeviceMobileIcon className="w-4 h-4 text-orange-600 dark:text-orange-400" />}
+              title="Download & Install tiku dev App"
             >
-              Install App
+              Download App
             </Button>
           )}
 
@@ -135,6 +135,18 @@ export function Navbar({ onOpenTerminal, activeSection = 'projects', onNavigate,
 
         {/* Mobile Hamburger & Actions */}
         <div className="flex md:hidden items-center gap-2">
+          {onOpenInstall && (
+            <button
+              type="button"
+              onClick={onOpenInstall}
+              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-orange-50 dark:bg-orange-950/60 border border-orange-200/90 dark:border-orange-800/80 text-orange-600 dark:text-orange-400 hover:bg-orange-100 dark:hover:bg-orange-900/60 transition-colors"
+              title="Download & Install tiku dev App"
+            >
+              <DeviceMobileIcon className="w-3.5 h-3.5" />
+              <span>App</span>
+            </button>
+          )}
+
           <a
             href={getResumePdfDownloadUrl()}
             target="_blank"

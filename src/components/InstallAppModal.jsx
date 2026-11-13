@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { CloseIcon, DownloadIcon, CheckCircleIcon, ShareIcon } from './icons';
 import { PrimaryButton, SecondaryButton } from './Button';
-import logoSvg from '../assets/dev-tiku.svg';
 
 export function InstallAppModal({ isOpen, onClose }) {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isIOS, setIsIOS] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
   const [installSuccess, setInstallSuccess] = useState(false);
+  const [showManualGuide, setShowManualGuide] = useState(false);
 
   useEffect(() => {
     // Check if already running in standalone PWA mode
-    const isStandalone =
+    const standaloneMode =
       window.matchMedia('(display-mode: standalone)').matches ||
       window.navigator.standalone === true;
 
-    if (isStandalone) {
-      setIsInstalled(true);
-      return;
-    }
+    setIsStandalone(standaloneMode);
 
     // Detect iOS devices (Safari does not support beforeinstallprompt)
     const isIosDevice =
@@ -32,16 +29,23 @@ export function InstallAppModal({ isOpen, onClose }) {
     const handleBeforeInstall = (e) => {
       e.preventDefault();
       setDeferredPrompt(e);
+      window.__pwaDeferredPrompt = e;
     };
 
     const handleAppInstalled = () => {
-      setIsInstalled(true);
+      setIsStandalone(true);
       setInstallSuccess(true);
       setDeferredPrompt(null);
+      window.__pwaDeferredPrompt = null;
       setTimeout(() => {
         onClose();
       }, 2500);
     };
+
+    // If window already captured it
+    if (window.__pwaDeferredPrompt) {
+      setDeferredPrompt(window.__pwaDeferredPrompt);
+    }
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstall);
     window.addEventListener('appinstalled', handleAppInstalled);
@@ -54,31 +58,30 @@ export function InstallAppModal({ isOpen, onClose }) {
 
   // Lock body scroll while modal is open
   useEffect(() => {
-    if (!isOpen || isInstalled) return;
+    if (!isOpen) return;
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = originalOverflow;
     };
-  }, [isOpen, isInstalled]);
+  }, [isOpen]);
 
-  if (!isOpen || isInstalled) return null;
+  if (!isOpen) return null;
 
   const handleInstallClick = async () => {
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      const { outcome } = await deferredPrompt.userChoice;
+    const prompt = deferredPrompt || window.__pwaDeferredPrompt;
+    if (prompt) {
+      prompt.prompt();
+      const { outcome } = await prompt.userChoice;
       if (outcome === 'accepted') {
         setInstallSuccess(true);
         setTimeout(() => onClose(), 2000);
       }
       setDeferredPrompt(null);
-    } else if (!isIOS) {
-      // In desktop Chrome/Edge without captured event, trigger alert or guide
-      alert(
-        "To install on your PC/Mac: Click the install icon (⊕ or computer display) located in the right side of your browser's address bar!"
-      );
-      onClose();
+      window.__pwaDeferredPrompt = null;
+    } else {
+      // Show embedded guide instead of a browser alert
+      setShowManualGuide(true);
     }
   };
 
@@ -104,7 +107,7 @@ export function InstallAppModal({ isOpen, onClose }) {
         {/* Header with App Icon */}
         <div className="flex items-center gap-4">
           <img
-            src="/pwa-icon.svg"
+            src="/pwa-icon-192.png"
             alt="tiku dev app icon"
             className="w-14 h-14 rounded-2xl shadow-md shrink-0 object-contain"
           />
@@ -113,7 +116,7 @@ export function InstallAppModal({ isOpen, onClose }) {
               Download Web App
             </span>
             <h2 className="text-xl font-bold text-slate-700 dark:text-slate-100 leading-tight">
-              Install tiku dev
+              {isStandalone ? 'tiku dev Installed' : 'Install tiku dev'}
             </h2>
             <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Available for PC & Mobile
@@ -121,8 +124,21 @@ export function InstallAppModal({ isOpen, onClose }) {
           </div>
         </div>
 
-        {/* Success message when installed */}
-        {installSuccess ? (
+        {/* State: Already Installed */}
+        {isStandalone ? (
+          <div className="space-y-4">
+            <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 flex items-center gap-3">
+              <CheckCircleIcon className="w-6 h-6 text-emerald-500 shrink-0" />
+              <div className="text-sm font-medium">
+                tiku dev is currently installed and running as a standalone app!
+              </div>
+            </div>
+            <PrimaryButton size="md" fullWidth onClick={onClose}>
+              Awesome, Got It!
+            </PrimaryButton>
+          </div>
+        ) : installSuccess ? (
+          /* State: Successfully Installed */
           <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-700 dark:text-emerald-300 flex items-center gap-3">
             <CheckCircleIcon className="w-6 h-6 text-emerald-500 shrink-0" />
             <div className="text-sm font-medium">
@@ -172,6 +188,22 @@ export function InstallAppModal({ isOpen, onClose }) {
                   </li>
                 </ol>
               </div>
+            ) : showManualGuide ? (
+              /* Desktop / Android browser guide when native event was already handled */
+              <div className="p-3.5 rounded-2xl bg-orange-50/70 dark:bg-orange-950/30 border border-orange-200/80 dark:border-orange-900/40 space-y-2 text-xs">
+                <div className="font-semibold text-orange-700 dark:text-orange-300 flex items-center gap-1.5">
+                  <DownloadIcon className="w-4 h-4 text-orange-500" />
+                  <span>To install directly in your browser:</span>
+                </div>
+                <ul className="list-disc list-inside space-y-1 text-slate-600 dark:text-slate-400 pl-1 leading-relaxed">
+                  <li>
+                    <strong>On PC/Mac:</strong> Click the install icon <span className="text-orange-500 font-bold">(⊕ or display icon)</span> in the right side of your browser address bar.
+                  </li>
+                  <li>
+                    <strong>On Android:</strong> Tap the browser menu <span className="text-orange-500 font-bold">(⋮)</span> and select <strong>"Install app"</strong> or <strong>"Add to Home screen"</strong>.
+                  </li>
+                </ul>
+              </div>
             ) : null}
 
             {/* Action Buttons */}
@@ -211,4 +243,3 @@ export function InstallAppModal({ isOpen, onClose }) {
 }
 
 export default InstallAppModal;
-

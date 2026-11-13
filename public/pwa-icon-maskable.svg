@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="pwa-primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#61DAFB"/>
+      <stop offset="100%" stop-color="#306998"/>
+    </linearGradient>
+    <linearGradient id="pwa-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFD43B"/>
+      <stop offset="100%" stop-color="#F7DF1E"/>
+    </linearGradient>
+    <linearGradient id="pwa-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#181a20"/>
+      <stop offset="100%" stop-color="#0d0e12"/>
+    </linearGradient>
+    <filter id="pwa-shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-opacity="0.5" flood-color="#000000"/>
+    </filter>
+  </defs>
+
+  <!-- Full bleed background covering the entire square for safe adaptive masking -->
+  <rect width="512" height="512" fill="url(#pwa-bg)"/>
+
+  <!-- Centered Terminal Badge scaled to 78% so it stays completely inside the 80% safe zone circle -->
+  <g transform="translate(256, 256) scale(0.78) translate(-256, -256)" filter="url(#pwa-shadow)">
+    <rect x="26" y="166" width="460" height="180" rx="24" ry="24" fill="#1E1E1E" stroke="#f97316" stroke-width="3"/>
+    <circle cx="58" cy="198" r="9" fill="#FF5F56" />
+    <circle cx="84" cy="198" r="9" fill="#FFBD2E" />
+    <circle cx="110" cy="198" r="9" fill="#27C93F" />
+    <text x="54" y="282" font-family="'Fira Code', 'Consolas', 'Courier New', monospace" font-size="54" font-weight="bold" fill="url(#pwa-primary)">&gt;_</text>
+    <text x="150" y="282" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="62" font-weight="800" fill="#FFFFFF" letter-spacing="-1">tiku</text>
+    <text x="278" y="282" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="62" font-weight="300" fill="url(#pwa-accent)">dev</text>
+    <rect x="394" y="235" width="24" height="52" fill="#61DAFB"/>
+  </g>
+</svg>
