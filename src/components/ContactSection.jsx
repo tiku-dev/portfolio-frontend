@@ -59,7 +59,7 @@ export function ContactSection() {
   };
 
   return (
-    <section id="contact" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 reveal-on-scroll">
+    <section id="contact" className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 reveal-on-scroll scroll-mt-20">
       {/* Section Header */}
       <div className="text-center max-w-2xl mx-auto mb-10 space-y-2">
         <span className="text-xs font-bold uppercase tracking-wider text-orange-500">

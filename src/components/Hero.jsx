@@ -21,7 +21,7 @@ export function Hero({ onOpenTerminal, bio }) {
   ];
 
   return (
-    <section id="hero" className="relative overflow-hidden py-16 sm:py-24">
+    <section id="hero" className="relative overflow-hidden py-16 sm:py-24 scroll-mt-20">
       {/* Decorative ambient background glow with gentle breathing animation */}
       <div className="absolute top-1/4 left-1/2 w-96 h-96 bg-orange-500/10 dark:bg-orange-500/5 rounded-full blur-3xl -z-10 pointer-events-none animate-ambient-glow" />
 
