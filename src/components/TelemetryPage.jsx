@@ -12,8 +12,10 @@ import {
 } from './icons';
 import logoSvg from '../assets/dev-tiku.svg';
 import { TelemetrySkeleton } from './Skeleton';
+import { Navbar } from './Navbar';
+import { Footer } from './Footer';
 
-export function TelemetryPage({ onBack, onOpenTerminal, onOpenInstall }) {
+export function TelemetryPage({ onBack, onNavigate, onNavigateToAdmin, onOpenTerminal, onOpenInstall }) {
   const [stats, setStats] = useState(null);
   const [health, setHealth] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -82,81 +84,39 @@ export function TelemetryPage({ onBack, onOpenTerminal, onOpenInstall }) {
 
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-orange-500 selection:text-white">
-      {/* Top Header Bar */}
-      <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/90 dark:bg-slate-950/90 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={onBack}
-              className="flex items-center group py-1 cursor-pointer"
-              title="Return to Home Portfolio"
-            >
-              <img
-                src={logoSvg}
-                alt="tiku dev logo"
-                className="h-8 sm:h-9 w-auto rounded-xl shadow-xs group-hover:scale-105 transition-transform"
-              />
-            </button>
-
-            {/* Status indicator */}
-            <div
-              className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400"
-            >
-              <span
-                className={`w-2 h-2 rounded-full ${
-                  isHealthy ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'
-                }`}
-              />
-              <span>{isHealthy ? 'Full Stack API Online' : 'API Standby'}</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2.5">
-            {onOpenInstall && (
-              <SecondaryButton
-                size="sm"
-                onClick={onOpenInstall}
-                leftIcon={<DeviceMobileIcon className="w-4 h-4 text-orange-600 dark:text-orange-400" />}
-              >
-                <span className="hidden sm:inline">Download App</span>
-                <span className="sm:hidden">App</span>
-              </SecondaryButton>
-            )}
-
-            <SecondaryButton
-              size="sm"
-              onClick={onOpenTerminal}
-              leftIcon={<TerminalIcon className="w-4 h-4 text-orange-500" />}
-            >
-              <span className="hidden sm:inline">CLI Console</span>
-              <span className="sm:hidden">CLI</span>
-            </SecondaryButton>
-
-            <PrimaryButton
-              size="sm"
-              onClick={onBack}
-              leftIcon={<ArrowLeftIcon className="w-4 h-4 text-white" />}
-            >
-              Back to Portfolio
-            </PrimaryButton>
-          </div>
-        </div>
-      </header>
+      {/* Default Navbar Component */}
+      <Navbar
+        activeSection="telemetry"
+        onNavigate={onNavigate || onBack}
+        onNavigateToTelemetry={() => {}}
+        onNavigateToAdmin={onNavigateToAdmin}
+        onOpenTerminal={onOpenTerminal}
+        onOpenInstall={onOpenInstall}
+      />
 
       {/* Main Telemetry Dashboard Content */}
       <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+        <div className="flex items-center justify-between gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onBack}
+              className="hover:text-orange-500 transition-colors cursor-pointer"
+            >
+              Portfolio Home
+            </button>
+            <span>/</span>
+            <span className="text-orange-600 dark:text-orange-400 font-semibold">Live System Telemetry</span>
+          </div>
+
           <button
             type="button"
             onClick={onBack}
-            className="hover:text-orange-500 transition-colors cursor-pointer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:text-orange-500 hover:border-orange-300 transition-colors cursor-pointer shadow-xs"
           >
-            Portfolio Home
+            ← Back to Portfolio
           </button>
-          <span>/</span>
-          <span className="text-orange-600 dark:text-orange-400 font-semibold">Live System Telemetry</span>
         </div>
 
         {/* Dashboard Title & Actions Card */}
@@ -408,6 +368,12 @@ export function TelemetryPage({ onBack, onOpenTerminal, onOpenInstall }) {
           </span>
         </div>
       </main>
+
+      <Footer
+        onNavigateToTelemetry={() => {}}
+        onNavigateToAdmin={onNavigateToAdmin}
+        onOpenTerminal={onOpenTerminal}
+      />
     </div>
   );
 }

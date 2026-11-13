@@ -23,8 +23,16 @@ import {
 } from './icons';
 import logoSvg from '../assets/dev-tiku.svg';
 import { ProjectEditModal } from './ProjectEditModal';
+import { Navbar } from './Navbar';
+import { Footer } from './Footer';
+import { MobileBottomNav } from './MobileBottomNav';
 
-export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
+export function AdminDashboardPage({
+  onBack,
+  onNavigate,
+  onNavigateToTelemetry,
+  onNavigateToAdmin,
+}) {
   // Authentication state
   const [user, setUser] = useState(getStoredUser());
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -77,7 +85,8 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
     setProjectsLoading(true);
     try {
       const data = await getProjects();
-      setProjects(data || []);
+      const list = Array.isArray(data) ? data : data?.results || [];
+      setProjects(list);
     } catch {
       setProjects([]);
     } finally {
@@ -90,7 +99,8 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
     setInquiriesLoading(true);
     try {
       const data = await getContactInquiries();
-      setInquiries(data || []);
+      const list = Array.isArray(data) ? data : data?.results || [];
+      setInquiries(list);
     } catch {
       setInquiries([]);
     } finally {
@@ -102,7 +112,8 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
   const fetchAllTags = useCallback(async () => {
     try {
       const data = await getTags();
-      setTags(data || []);
+      const list = Array.isArray(data) ? data : data?.results || [];
+      setTags(list);
     } catch {
       setTags([]);
     }
@@ -199,29 +210,17 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
   // 2. Unauthenticated: Full Login View
   if (!user) {
     return (
-      <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-orange-500 selection:text-white">
-        {/* Header */}
-        <header className="sticky top-0 z-30 w-full backdrop-blur-md bg-white/90 dark:bg-slate-950/90 border-b border-slate-200/80 dark:border-slate-800/80">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <button
-              type="button"
-              onClick={onBack}
-              className="flex items-center gap-2 group cursor-pointer text-slate-600 dark:text-slate-300 hover:text-orange-500 transition-colors"
-            >
-              <ArrowLeftIcon className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
-              <span className="text-xs font-bold uppercase tracking-wider">Back to Portfolio</span>
-            </button>
-            <div className="flex items-center gap-2">
-              <img src={logoSvg} alt="tiku dev logo" className="h-7 w-auto rounded-xl" />
-              <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100">
-                Admin Control
-              </span>
-            </div>
-          </div>
-        </header>
+      <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-orange-500 selection:text-white pb-24 md:pb-0">
+        {/* Default Navbar Component */}
+        <Navbar
+          activeSection="admin"
+          onNavigate={onNavigate || onBack}
+          onNavigateToTelemetry={onNavigateToTelemetry}
+          onNavigateToAdmin={onNavigateToAdmin}
+        />
 
         {/* Login Box */}
-        <main className="flex-1 flex items-center justify-center p-4">
+        <main className="flex-1 flex items-center justify-center p-4 my-8 sm:my-12">
           <div className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 sm:p-8 shadow-xl space-y-6">
             <div className="text-center space-y-2">
               <div className="inline-flex p-3 rounded-2xl bg-orange-50 dark:bg-orange-950/60 border border-orange-200 dark:border-orange-900 text-orange-600 dark:text-orange-400">
@@ -231,7 +230,7 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
                 Admin Authentication
               </h1>
               <p className="text-xs text-slate-500 dark:text-slate-400 max-w-xs mx-auto">
-                Sign in with your Django SimpleJWT credentials to manage projects, case studies, and inquiries.
+                Sign in to manage projects, case studies, and inquiries.
               </p>
             </div>
 
@@ -250,7 +249,7 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="e.g. tikupy1@gmail.com"
+                  placeholder="yourname@example.com"
                   required
                   autoFocus
                   className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
@@ -265,7 +264,7 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••••••"
+                  placeholder="Password"
                   required
                   className="w-full px-4 py-2.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
@@ -273,7 +272,7 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
 
               <div className="pt-2">
                 <PrimaryButton size="md" fullWidth type="submit" isLoading={loginLoading}>
-                  Sign In with JWT
+                  Sign In
                 </PrimaryButton>
               </div>
             </form>
@@ -289,6 +288,18 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
             </div>
           </div>
         </main>
+
+        {/* Default Footer Component */}
+        <Footer
+          onNavigateToTelemetry={onNavigateToTelemetry}
+          onNavigateToAdmin={onNavigateToAdmin}
+        />
+
+        {/* Default Mobile Bottom Navigation */}
+        <MobileBottomNav
+          activeSection="admin"
+          onNavigate={onNavigate || onBack}
+        />
       </div>
     );
   }
@@ -296,49 +307,50 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
   // 3. Authenticated: Full Admin Control Panel
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-orange-500 selection:text-white">
-      {/* Top Header */}
-      <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/90 dark:bg-slate-950/90 border-b border-slate-200/80 dark:border-slate-800/80">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      {/* Default Navbar Component */}
+      <Navbar
+        activeSection="admin"
+        onNavigate={onNavigate || onBack}
+        onNavigateToTelemetry={onNavigateToTelemetry}
+        onNavigateToAdmin={onNavigateToAdmin}
+      />
+
+      {/* Main Content Area */}
+      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        {/* Admin Session Identity Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
           <div className="flex items-center gap-3">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+            <div>
+              <div className="text-xs font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                <span>{user.email || user.username}</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
+                  {user.is_superuser ? 'Superuser' : 'Staff Admin'}
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                Admin session active via Django SimpleJWT &mdash; Full CRUD authorization
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={onBack}
-              className="flex items-center gap-2 group cursor-pointer"
-              title="Return to Main Portfolio"
+              className="px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-orange-500 cursor-pointer transition-colors"
             >
-              <img src={logoSvg} alt="tiku dev logo" className="h-8 w-auto rounded-xl" />
-              <span className="font-extrabold text-sm text-slate-800 dark:text-slate-100 hidden sm:inline">
-                Admin Portal
-              </span>
+              ← Back to Portfolio
             </button>
-            <span className="hidden sm:inline px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase bg-emerald-100 dark:bg-emerald-950/80 text-emerald-800 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800">
-              JWT Active
-            </span>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="text-right hidden sm:block">
-              <div className="text-xs font-bold text-slate-800 dark:text-slate-200">
-                {user.email || user.username}
-              </div>
-              <div className="text-[10px] text-slate-400">
-                {user.is_superuser ? 'Superuser' : 'Staff Admin'}
-              </div>
-            </div>
-
             <button
               type="button"
               onClick={handleLogout}
-              className="px-3.5 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 text-xs font-bold text-slate-600 dark:text-slate-300 hover:text-red-600 hover:border-red-300 dark:hover:border-red-800 transition-colors cursor-pointer"
+              className="px-3.5 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900/60 bg-rose-50 dark:bg-rose-950/40 text-xs font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-100 dark:hover:bg-rose-900/80 transition-colors cursor-pointer"
             >
               Sign Out
             </button>
           </div>
         </div>
-      </header>
-
-      {/* Main Content Area */}
-      <main className="flex-1 max-w-6xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         {/* Navigation Tabs */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-4">
           <div className="flex items-center gap-2">
@@ -351,7 +363,7 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
                   : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800'
               }`}
             >
-              Portfolio Projects ({projects.length})
+              Portfolio Projects ({Array.isArray(projects) ? projects.length : 0})
             </button>
 
             <button
@@ -363,7 +375,7 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
                   : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800'
               }`}
             >
-              Contact Inquiries ({inquiries.length})
+              Contact Inquiries ({Array.isArray(inquiries) ? inquiries.length : 0})
             </button>
 
             <button
@@ -375,7 +387,7 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
                   : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 border border-slate-200 dark:border-slate-800'
               }`}
             >
-              Technology Tags ({tags.length})
+              Technology Tags ({Array.isArray(tags) ? tags.length : 0})
             </button>
           </div>
 
@@ -509,7 +521,7 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
 
             {inquiriesLoading ? (
               <div className="py-12 text-center text-xs text-slate-400">Loading inquiries...</div>
-            ) : inquiries.length === 0 ? (
+            ) : !Array.isArray(inquiries) || inquiries.length === 0 ? (
               <div className="py-12 text-center rounded-3xl border border-dashed border-slate-200 dark:border-slate-800 p-8 text-xs text-slate-500">
                 No visitor inquiries received yet.
               </div>
@@ -517,7 +529,7 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
               <div className="space-y-3">
                 {inquiries.map((inq) => (
                   <div
-                    key={inq.id}
+                    key={inq.id || inq.email || Math.random()}
                     className="p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 space-y-2 shadow-2xs"
                   >
                     <div className="flex flex-wrap items-center justify-between gap-2">
@@ -534,7 +546,7 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
                         </a>
                       </div>
                       <span className="text-[10px] text-slate-400">
-                        {new Date(inq.created_at).toLocaleString()}
+                        {inq.created_at ? new Date(inq.created_at).toLocaleString() : 'Recently'}
                       </span>
                     </div>
 
@@ -597,9 +609,9 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
                 Existing Portfolio Tags ({tags.length})
               </h2>
               <div className="flex flex-wrap gap-2">
-                {tags.map((t) => (
+                {Array.isArray(tags) && tags.map((t) => (
                   <span
-                    key={t.id}
+                    key={t.id || t.name}
                     className="px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300"
                   >
                     {t.name} <span className="text-[10px] text-slate-400">({t.category})</span>
@@ -628,6 +640,18 @@ export function AdminDashboardPage({ onBack, onNavigateToTelemetry }) {
         project={selectedProject}
         onSaved={fetchAllProjects}
         onDeleted={fetchAllProjects}
+      />
+
+      {/* Default Footer Component */}
+      <Footer
+        onNavigateToTelemetry={onNavigateToTelemetry}
+        onNavigateToAdmin={() => {}}
+      />
+
+      {/* Default Mobile Bottom Navigation */}
+      <MobileBottomNav
+        activeSection="admin"
+        onNavigate={onNavigate || onBack}
       />
     </div>
   );

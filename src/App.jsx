@@ -132,6 +132,22 @@ export function App() {
       return;
     }
     setActiveSection(sectionId);
+    if (currentRoute.view !== 'home') {
+      window.location.hash = sectionId === 'hero' ? '' : `#${sectionId}`;
+      setCurrentRoute({ view: 'home' });
+      setTimeout(() => {
+        document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
+          el.classList.add('is-visible');
+        });
+        if (sectionId === 'hero') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          const target = document.getElementById(sectionId);
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 50);
+      return;
+    }
     if (sectionId === 'hero') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       window.history.replaceState(null, '', ' ');
@@ -212,6 +228,9 @@ export function App() {
         <CaseStudyPage
           projectId={currentRoute.id}
           onBack={handleBackToPortfolio}
+          onNavigate={handleNavigate}
+          onNavigateToTelemetry={handleNavigateToTelemetry}
+          onNavigateToAdmin={handleNavigateToAdmin}
           onOpenTerminal={() => setTerminalOpen(true)}
         />
 
@@ -236,6 +255,8 @@ export function App() {
       <>
         <TelemetryPage
           onBack={handleBackToPortfolio}
+          onNavigate={handleNavigate}
+          onNavigateToAdmin={handleNavigateToAdmin}
           onOpenTerminal={() => setTerminalOpen(true)}
           onOpenInstall={() => setInstallPromptOpen(true)}
         />
@@ -268,7 +289,9 @@ export function App() {
       <>
         <AdminDashboardPage
           onBack={handleBackToPortfolio}
+          onNavigate={handleNavigate}
           onNavigateToTelemetry={handleNavigateToTelemetry}
+          onNavigateToAdmin={handleNavigateToAdmin}
         />
 
         {/* Interactive Developer Terminal / Console Modal */}

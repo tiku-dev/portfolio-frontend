@@ -30,7 +30,7 @@ export function Hero({ onOpenTerminal, bio }) {
         <div className="animate-fade-in-up">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 dark:bg-orange-950/40 border border-orange-200 dark:border-orange-800/60 text-orange-700 dark:text-orange-300 text-xs font-semibold shadow-xs hover:scale-105 transition-transform duration-300">
             <span className="w-2 h-2 rounded-full bg-orange-500 animate-ping" />
-            <span>Available for Senior Full Stack & Lead Roles</span>
+            <span>Available for Full Stack & Lead Roles</span>
           </div>
         </div>
 
@@ -52,18 +52,18 @@ export function Hero({ onOpenTerminal, bio }) {
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 pt-2 w-full max-w-sm sm:max-w-none mx-auto animate-fade-in-up [animation-delay:300ms]">
           <a href="#projects" className="w-full sm:w-auto">
             <PrimaryButton size="lg" fullWidth leftIcon={<ServerIcon className="w-5 h-5 text-white" />}>
-              Explore Full Stack Projects
+              Explore Full Projects
             </PrimaryButton>
           </a>
 
-          <SecondaryButton
+          {/* <SecondaryButton
             size="lg"
             fullWidth
             onClick={onOpenTerminal}
             leftIcon={<TerminalIcon className="w-5 h-5 text-orange-600 dark:text-orange-400" />}
           >
             Launch CLI Terminal
-          </SecondaryButton>
+          </SecondaryButton> */}
         </div>
 
         {/* Tech Stack Competencies with Hover Lift */}

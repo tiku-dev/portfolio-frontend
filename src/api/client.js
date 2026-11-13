@@ -177,7 +177,8 @@ export async function deleteProject(idOrSlug) {
 }
 
 export async function getTags() {
-  return await request('/api/v1/projects/tags/');
+  const res = await request('/api/v1/projects/tags/');
+  return Array.isArray(res) ? res : res?.results || [];
 }
 
 export async function createTag(tagData) {
@@ -188,7 +189,8 @@ export async function createTag(tagData) {
 }
 
 export async function getContactInquiries() {
-  return await request('/api/v1/contact/inquiries/');
+  const res = await request('/api/v1/contact/inquiries/');
+  return Array.isArray(res) ? res : res?.results || [];
 }
 
 

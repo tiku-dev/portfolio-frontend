@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Button, PrimaryButton } from './Button';
+import { PrimaryButton } from './Button';
 import { getBackendHealth, getResumePdfDownloadUrl, getStoredUser, getCurrentUser } from '../api/client';
-import { TerminalIcon, DownloadIcon, MenuIcon, CloseIcon, DeviceMobileIcon, ActivityIcon, LockIcon } from './icons';
+import { DownloadIcon, MenuIcon, CloseIcon, ActivityIcon, LockIcon } from './icons';
 import logoSvg from '../assets/dev-tiku.svg';
 
 export function Navbar({
@@ -129,31 +129,8 @@ export function Navbar({
             ) : (
               <LockIcon className="w-3.5 h-3.5 text-orange-500" />
             )}
-            <span>{currentUser ? `Admin @${(currentUser.username || currentUser.email.split('@')[0])}` : 'Admin Login'}</span>
+            <span>{currentUser ? `Admin @${(currentUser.username || currentUser.email.split('@')[0])}` : 'Login'}</span>
           </button>
-
-          {/* Download App Trigger */}
-          {onOpenInstall && (
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={onOpenInstall}
-              leftIcon={<DeviceMobileIcon className="w-4 h-4 text-orange-600 dark:text-orange-400" />}
-              title="Download & Install tiku dev App"
-            >
-              Download App
-            </Button>
-          )}
-
-          {/* Terminal Trigger */}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={onOpenTerminal}
-            leftIcon={<TerminalIcon className="w-4 h-4 text-orange-500" />}
-          >
-            CLI Console
-          </Button>
 
           {/* Direct Resume PDF Download */}
           <PrimaryButton
@@ -188,18 +165,6 @@ export function Navbar({
           >
             <LockIcon className="w-4 h-4 text-orange-500" />
           </button>
-
-          {onOpenInstall && (
-            <button
-              type="button"
-              onClick={onOpenInstall}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-semibold bg-orange-50 dark:bg-orange-950/60 border border-orange-200/90 dark:border-orange-800/80 text-orange-600 dark:text-orange-400 hover:bg-orange-100 dark:hover:bg-orange-900/60 transition-colors"
-              title="Download & Install tiku dev App"
-            >
-              <DeviceMobileIcon className="w-3.5 h-3.5" />
-              <span>App</span>
-            </button>
-          )}
 
           <PrimaryButton
             as="a"
@@ -299,36 +264,6 @@ export function Navbar({
               <span className="text-[10px] font-bold text-emerald-600 uppercase">{currentUser ? 'Active' : 'Auth'}</span>
             </button>
           </nav>
-
-          <div className="pt-2 flex flex-col gap-2">
-            {onOpenInstall && (
-              <Button
-                variant="secondary"
-                size="md"
-                fullWidth
-                onClick={() => {
-                  closeMobileMenu();
-                  onOpenInstall();
-                }}
-                leftIcon={<DeviceMobileIcon className="w-4 h-4 text-orange-600 dark:text-orange-400" />}
-              >
-                Install App on Device
-              </Button>
-            )}
-
-            <Button
-              variant="outline"
-              size="md"
-              fullWidth
-              onClick={() => {
-                closeMobileMenu();
-                onOpenTerminal();
-              }}
-              leftIcon={<TerminalIcon className="w-4 h-4 text-orange-500" />}
-            >
-              Launch Developer Console
-            </Button>
-          </div>
         </div>
       )}
     </header>

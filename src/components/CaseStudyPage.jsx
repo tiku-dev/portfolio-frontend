@@ -10,9 +10,18 @@ import {
   EditIcon,
 } from './icons';
 import { ProjectEditModal } from './ProjectEditModal';
+import { Navbar } from './Navbar';
+import { Footer } from './Footer';
 import logoSvg from '../assets/dev-tiku.svg';
 
-export function CaseStudyPage({ projectId, onBack, onOpenTerminal }) {
+export function CaseStudyPage({
+  projectId,
+  onBack,
+  onNavigate,
+  onNavigateToTelemetry,
+  onNavigateToAdmin,
+  onOpenTerminal,
+}) {
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -73,21 +82,12 @@ export function CaseStudyPage({ projectId, onBack, onOpenTerminal }) {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 flex flex-col font-sans">
-        {/* Simple Header */}
-        <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/90 dark:bg-slate-950/90 border-b border-slate-200/80 dark:border-slate-800/80">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
-            <a href="#projects" onClick={onBack} className="flex items-center shrink-0">
-              <img src={logoSvg} alt="tiku dev logo" className="h-8 w-auto rounded-xl" />
-            </a>
-            <button
-              type="button"
-              onClick={onBack}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-orange-500 transition-colors cursor-pointer shrink-0"
-            >
-              ← Back to Projects
-            </button>
-          </div>
-        </header>
+        <Navbar
+          activeSection="projects"
+          onNavigate={onNavigate || onBack}
+          onNavigateToTelemetry={onNavigateToTelemetry}
+          onNavigateToAdmin={onNavigateToAdmin}
+        />
 
         <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 w-full flex-1">
           <div className="animate-pulse space-y-6">
@@ -97,6 +97,11 @@ export function CaseStudyPage({ projectId, onBack, onOpenTerminal }) {
             <div className="h-64 bg-slate-200 dark:bg-slate-800 rounded-3xl mt-8" />
           </div>
         </main>
+
+        <Footer
+          onNavigateToTelemetry={onNavigateToTelemetry}
+          onNavigateToAdmin={onNavigateToAdmin}
+        />
       </div>
     );
   }
@@ -104,20 +109,12 @@ export function CaseStudyPage({ projectId, onBack, onOpenTerminal }) {
   if (error || !project) {
     return (
       <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 flex flex-col font-sans">
-        <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/90 dark:bg-slate-950/90 border-b border-slate-200/80 dark:border-slate-800/80">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
-            <a href="#projects" onClick={onBack} className="flex items-center shrink-0">
-              <img src={logoSvg} alt="tiku dev logo" className="h-8 w-auto rounded-xl" />
-            </a>
-            <button
-              type="button"
-              onClick={onBack}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-600 dark:text-slate-300 hover:text-orange-500 transition-colors cursor-pointer shrink-0"
-            >
-              ← Back to Projects
-            </button>
-          </div>
-        </header>
+        <Navbar
+          activeSection="projects"
+          onNavigate={onNavigate || onBack}
+          onNavigateToTelemetry={onNavigateToTelemetry}
+          onNavigateToAdmin={onNavigateToAdmin}
+        />
 
         <main className="max-w-xl mx-auto px-4 py-24 text-center space-y-4 flex-1">
           <div className="w-16 h-16 bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 rounded-3xl mx-auto flex items-center justify-center text-2xl font-bold">
@@ -135,101 +132,98 @@ export function CaseStudyPage({ projectId, onBack, onOpenTerminal }) {
             </PrimaryButton>
           </div>
         </main>
+
+        <Footer
+          onNavigateToTelemetry={onNavigateToTelemetry}
+          onNavigateToAdmin={onNavigateToAdmin}
+        />
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-orange-500 selection:text-white">
-      {/* Top Sticky Navigation */}
-      <header className="sticky top-0 z-40 w-full backdrop-blur-md bg-white/95 dark:bg-slate-950/95 border-b border-slate-200/80 dark:border-slate-800/80 transition-colors shadow-xs">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
-          {/* Left: Brand Logo Only */}
-          <a
-            href="#projects"
-            onClick={onBack}
-            className="flex items-center hover:opacity-90 transition-opacity shrink-0"
-            title="Return to Main Portfolio"
-          >
-            <img src={logoSvg} alt="tiku dev logo" className="h-8 sm:h-9 w-auto rounded-xl" />
-          </a>
-
-          {/* Right: Back Button and Live Demo / View Website Actions */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            <button
-              type="button"
-              onClick={onBack}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-orange-400 hover:text-orange-600 transition-all cursor-pointer group shrink-0"
-            >
-              <span className="group-hover:-translate-x-1 transition-transform">←</span>
-              <span className="hidden sm:inline">Back to Projects</span>
-              <span className="sm:hidden">Back</span>
-            </button>
-
-            {currentUser && (
-              <button
-                type="button"
-                onClick={() => setEditModalOpen(true)}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 hover:bg-orange-600 dark:hover:bg-orange-500 dark:hover:text-white transition-colors shadow-xs shrink-0 cursor-pointer"
-                title="Edit this project"
-              >
-                <EditIcon className="w-3.5 h-3.5 text-orange-400 dark:text-orange-600" />
-                <span className="hidden sm:inline">Edit Project</span>
-                <span className="sm:hidden">Edit</span>
-              </button>
-            )}
-
-            {project.github_url && (
-              <a
-                href={project.github_url}
-                target="_blank"
-                rel="noreferrer"
-                className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-orange-400 hover:text-orange-600 transition-colors shrink-0"
-              >
-                <GithubIcon className="w-3.5 h-3.5" />
-                <span>Source</span>
-              </a>
-            )}
-
-            {project.demo_url && (
-              <a
-                href={project.demo_url}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-orange-500 text-white hover:bg-orange-600 transition-colors shadow-xs shrink-0"
-              >
-                <ExternalLinkIcon className="w-3.5 h-3.5" />
-                <span>{project.slug === 'tikushop' ? 'View Website' : 'Live Demo'}</span>
-              </a>
-            )}
-          </div>
-        </div>
-      </header>
+      {/* Default Navbar Component */}
+      <Navbar
+        activeSection="projects"
+        onNavigate={onNavigate || onBack}
+        onNavigateToTelemetry={onNavigateToTelemetry}
+        onNavigateToAdmin={onNavigateToAdmin}
+      />
 
       {/* Main Case Study Article */}
       <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-10 flex-1 w-full">
-        {/* Breadcrumb & Top Metadata */}
+        {/* Breadcrumb & Top Actions Bar */}
         <div className="space-y-4">
-          <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400 dark:text-slate-500">
-            <button
-              type="button"
-              onClick={onBack}
-              className="hover:text-orange-500 transition-colors cursor-pointer"
-            >
-              Portfolio
-            </button>
-            <span>/</span>
-            <button
-              type="button"
-              onClick={onBack}
-              className="hover:text-orange-500 transition-colors cursor-pointer"
-            >
-              Case Studies
-            </button>
-            <span>/</span>
-            <span className="text-slate-700 dark:text-slate-300 font-medium">
-              {project.title}
-            </span>
+          <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-slate-400 dark:text-slate-500">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onBack}
+                className="hover:text-orange-500 transition-colors cursor-pointer"
+              >
+                Portfolio
+              </button>
+              <span>/</span>
+              <button
+                type="button"
+                onClick={onBack}
+                className="hover:text-orange-500 transition-colors cursor-pointer"
+              >
+                Case Studies
+              </button>
+              <span>/</span>
+              <span className="text-slate-700 dark:text-slate-300 font-medium">
+                {project.title}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onBack}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 hover:border-orange-400 hover:text-orange-600 transition-all cursor-pointer group shadow-2xs"
+              >
+                <span className="group-hover:-translate-x-1 transition-transform">←</span>
+                <span>Back to Projects</span>
+              </button>
+
+              {currentUser && (
+                <button
+                  type="button"
+                  onClick={() => setEditModalOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 hover:bg-orange-600 dark:hover:bg-orange-500 dark:hover:text-white transition-colors shadow-2xs cursor-pointer"
+                  title="Edit this project"
+                >
+                  <EditIcon className="w-3.5 h-3.5 text-orange-400 dark:text-orange-600" />
+                  <span>Edit Project</span>
+                </button>
+              )}
+
+              {project.github_url && (
+                <a
+                  href={project.github_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:border-orange-400 hover:text-orange-600 transition-colors"
+                >
+                  <GithubIcon className="w-3.5 h-3.5" />
+                  <span>Source</span>
+                </a>
+              )}
+
+              {project.demo_url && (
+                <a
+                  href={project.demo_url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-orange-500 text-white hover:bg-orange-600 transition-colors shadow-2xs"
+                >
+                  <ExternalLinkIcon className="w-3.5 h-3.5" />
+                  <span>{project.slug === 'tikushop' ? 'View Website' : 'Live Demo'}</span>
+                </a>
+              )}
+            </div>
           </div>
 
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-orange-50 dark:bg-orange-950/40 text-orange-600 dark:text-orange-400 border border-orange-200/60 dark:border-orange-800/60">
@@ -434,19 +428,12 @@ export function CaseStudyPage({ projectId, onBack, onOpenTerminal }) {
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-950 py-10">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 dark:text-slate-400">
-          <p>© {new Date().getFullYear()} tiku dev &mdash; All case studies & systems documentation.</p>
-          <button
-            type="button"
-            onClick={onBack}
-            className="text-orange-500 hover:underline cursor-pointer"
-          >
-            ← Return to Main Portfolio
-          </button>
-        </div>
-      </footer>
+      {/* Default Footer Component */}
+      <Footer
+        onNavigateToTelemetry={onNavigateToTelemetry}
+        onNavigateToAdmin={onNavigateToAdmin}
+        onOpenTerminal={onOpenTerminal}
+      />
 
       <ProjectEditModal
         isOpen={editModalOpen}
