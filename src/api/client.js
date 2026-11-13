@@ -5,33 +5,192 @@ import resumePdfAsset from '../assets/Tiku Faith – Software Engineer Resume.pd
  * Connects to http://127.0.0.1:8000/api/v1/ with graceful fallback data.
  */
 
-// Production backend on Vercel with automatic local override via VITE_API_URL
+const isLocalhost =
+  typeof window !== 'undefined' &&
+  (window.location.hostname === 'localhost' ||
+    window.location.hostname === '127.0.0.1' ||
+    window.location.hostname === '0.0.0.0');
+
 export const API_BASE_URL = (
-  import.meta.env.VITE_API_URL || 'https://portfolio-backend-five-ruby.vercel.app'
+  import.meta.env.VITE_API_URL ||
+  (isLocalhost ? 'http://127.0.0.1:8000' : 'https://portfolio-backend-five-ruby.vercel.app')
 ).replace(/\/+$/, '');
+
+// JWT Token Storage & Helpers
+export function getAccessToken() {
+  return localStorage.getItem('tiku_access_token') || null;
+}
+
+export function getRefreshToken() {
+  return localStorage.getItem('tiku_refresh_token') || null;
+}
+
+export function setTokens(access, refresh) {
+  if (access) localStorage.setItem('tiku_access_token', access);
+  if (refresh) localStorage.setItem('tiku_refresh_token', refresh);
+}
+
+export function clearTokens() {
+  localStorage.removeItem('tiku_access_token');
+  localStorage.removeItem('tiku_refresh_token');
+  localStorage.removeItem('tiku_user_info');
+}
+
+export function getStoredUser() {
+  try {
+    const raw = localStorage.getItem('tiku_user_info');
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+export async function refreshAccessToken() {
+  const refresh = getRefreshToken();
+  if (!refresh) return null;
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/v1/accounts/refresh/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh }),
+    });
+    if (!res.ok) {
+      clearTokens();
+      return null;
+    }
+    const data = await res.json();
+    if (data.access) {
+      setTokens(data.access, data.refresh || refresh);
+      return data.access;
+    }
+  } catch {
+    clearTokens();
+  }
+  return null;
+}
 
 async function request(endpoint, options = {}) {
   const url = `${API_BASE_URL}${endpoint}`;
+  const token = getAccessToken();
+  const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
+
   const config = {
     headers: {
       'Content-Type': 'application/json',
+      ...authHeader,
       ...options.headers,
     },
     ...options,
   };
 
   try {
-    const res = await fetch(url, config);
+    let res = await fetch(url, config);
+
+    // If 401 Unauthorized and refresh token exists, attempt refresh once
+    if (res.status === 401 && getRefreshToken() && !endpoint.includes('/accounts/')) {
+      const newToken = await refreshAccessToken();
+      if (newToken) {
+        config.headers.Authorization = `Bearer ${newToken}`;
+        res = await fetch(url, config);
+      }
+    }
+
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));
-      throw new Error(errorData.error || errorData.detail || `HTTP Error ${res.status}`);
+      const message =
+        errorData.detail ||
+        errorData.error ||
+        (typeof errorData === 'object' ? Object.values(errorData).flat().join(', ') : null) ||
+        `HTTP Error ${res.status}`;
+      throw new Error(message);
     }
+    if (res.status === 204) return null;
     return await res.json();
   } catch (err) {
     console.warn(`[API Client] Request to ${endpoint} failed:`, err.message);
     throw err;
   }
 }
+
+// Authentication & SimpleJWT Actions (Email-based)
+export async function login(email, password) {
+  const cleanEmail = email.trim();
+  const data = await request('/api/v1/accounts/login/', {
+    method: 'POST',
+    body: JSON.stringify({ email: cleanEmail, password }),
+  });
+  if (data.access) {
+    setTokens(data.access, data.refresh);
+    try {
+      const me = await getCurrentUser();
+      localStorage.setItem('tiku_user_info', JSON.stringify(me));
+      return { success: true, user: me, tokens: data };
+    } catch {
+      const fallbackUser = {
+        email: cleanEmail,
+        username: cleanEmail.split('@')[0],
+        is_staff: true,
+        is_superuser: true,
+      };
+      localStorage.setItem('tiku_user_info', JSON.stringify(fallbackUser));
+      return { success: true, user: fallbackUser, tokens: data };
+    }
+  }
+  throw new Error('Login failed: No access token returned.');
+}
+
+export function logout() {
+  clearTokens();
+}
+
+export async function getCurrentUser() {
+  const token = getAccessToken();
+  if (!token) return null;
+  try {
+    const me = await request('/api/v1/accounts/me/');
+    localStorage.setItem('tiku_user_info', JSON.stringify(me));
+    return me;
+  } catch {
+    return getStoredUser();
+  }
+}
+
+// Admin CRUD Operations for Projects & Tags
+export async function createProject(projectData) {
+  return await request('/api/v1/projects/', {
+    method: 'POST',
+    body: JSON.stringify(projectData),
+  });
+}
+
+export async function updateProject(idOrSlug, projectData) {
+  return await request(`/api/v1/projects/${idOrSlug}/`, {
+    method: 'PATCH',
+    body: JSON.stringify(projectData),
+  });
+}
+
+export async function deleteProject(idOrSlug) {
+  return await request(`/api/v1/projects/${idOrSlug}/`, {
+    method: 'DELETE',
+  });
+}
+
+export async function getTags() {
+  return await request('/api/v1/projects/tags/');
+}
+
+export async function createTag(tagData) {
+  return await request('/api/v1/projects/tags/', {
+    method: 'POST',
+    body: JSON.stringify(tagData),
+  });
+}
+
+export async function getContactInquiries() {
+  return await request('/api/v1/contact/inquiries/');
+}
+
 
 // 1. Projects API
 export async function getProjects(tag = null) {

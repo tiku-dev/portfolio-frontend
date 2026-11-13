@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getProjectDetail, pingProject } from '../api/client';
+import { getProjectDetail, pingProject, getStoredUser, getCurrentUser } from '../api/client';
 import { PrimaryButton, SecondaryButton } from './Button';
 import {
   GithubIcon,
@@ -7,7 +7,9 @@ import {
   TerminalIcon,
   RefreshIcon,
   ActivityIcon,
+  EditIcon,
 } from './icons';
+import { ProjectEditModal } from './ProjectEditModal';
 import logoSvg from '../assets/dev-tiku.svg';
 
 export function CaseStudyPage({ projectId, onBack, onOpenTerminal }) {
@@ -16,6 +18,16 @@ export function CaseStudyPage({ projectId, onBack, onOpenTerminal }) {
   const [error, setError] = useState(null);
   const [pingLoading, setPingLoading] = useState(false);
   const [pingResult, setPingResult] = useState(null);
+  const [currentUser, setCurrentUser] = useState(getStoredUser());
+  const [editModalOpen, setEditModalOpen] = useState(false);
+
+  useEffect(() => {
+    getCurrentUser()
+      .then((user) => {
+        if (user) setCurrentUser(user);
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -153,6 +165,19 @@ export function CaseStudyPage({ projectId, onBack, onOpenTerminal }) {
               <span className="hidden sm:inline">Back to Projects</span>
               <span className="sm:hidden">Back</span>
             </button>
+
+            {currentUser && (
+              <button
+                type="button"
+                onClick={() => setEditModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 hover:bg-orange-600 dark:hover:bg-orange-500 dark:hover:text-white transition-colors shadow-xs shrink-0 cursor-pointer"
+                title="Edit this project"
+              >
+                <EditIcon className="w-3.5 h-3.5 text-orange-400 dark:text-orange-600" />
+                <span className="hidden sm:inline">Edit Project</span>
+                <span className="sm:hidden">Edit</span>
+              </button>
+            )}
 
             {project.github_url && (
               <a
@@ -369,6 +394,19 @@ export function CaseStudyPage({ projectId, onBack, onOpenTerminal }) {
           </SecondaryButton>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">
+            {currentUser && (
+              <button
+                type="button"
+                onClick={() => setEditModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-900 text-white dark:bg-slate-100 dark:text-slate-900 hover:bg-orange-600 dark:hover:bg-orange-500 dark:hover:text-white transition-colors shadow-xs shrink-0 cursor-pointer"
+                title="Edit this project"
+              >
+                <EditIcon className="w-3.5 h-3.5 text-orange-400 dark:text-orange-600" />
+                <span className="hidden sm:inline">Edit Project</span>
+                <span className="sm:hidden">Edit</span>
+              </button>
+            )}
+
             {project.github_url && (
               <a href={project.github_url} target="_blank" rel="noreferrer" className="w-full sm:w-auto">
                 <SecondaryButton
@@ -409,6 +447,18 @@ export function CaseStudyPage({ projectId, onBack, onOpenTerminal }) {
           </button>
         </div>
       </footer>
+
+      <ProjectEditModal
+        isOpen={editModalOpen}
+        onClose={() => setEditModalOpen(false)}
+        project={project}
+        onSaved={(updated) => {
+          setProject(updated);
+        }}
+        onDeleted={() => {
+          onBack();
+        }}
+      />
     </div>
   );
 }

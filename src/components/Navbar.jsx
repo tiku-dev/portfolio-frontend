@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button, PrimaryButton } from './Button';
-import { getBackendHealth, getResumePdfDownloadUrl } from '../api/client';
-import { TerminalIcon, DownloadIcon, MenuIcon, CloseIcon, DeviceMobileIcon, ActivityIcon } from './icons';
+import { getBackendHealth, getResumePdfDownloadUrl, getStoredUser, getCurrentUser } from '../api/client';
+import { TerminalIcon, DownloadIcon, MenuIcon, CloseIcon, DeviceMobileIcon, ActivityIcon, LockIcon } from './icons';
 import logoSvg from '../assets/dev-tiku.svg';
 
 export function Navbar({
@@ -10,9 +10,11 @@ export function Navbar({
   onNavigate,
   onOpenInstall,
   onNavigateToTelemetry,
+  onNavigateToAdmin,
 }) {
   const [health, setHealth] = useState({ status: 'checking', database: 'checking' });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(getStoredUser());
 
   const navItems = [
     { id: 'projects', label: 'Case Studies', mobileLabel: 'Full Stack Case Studies' },
@@ -24,6 +26,12 @@ export function Navbar({
     getBackendHealth()
       .then((data) => setHealth(data))
       .catch(() => setHealth({ status: 'offline', database: 'disconnected' }));
+
+    getCurrentUser()
+      .then((u) => {
+        if (u) setCurrentUser(u);
+      })
+      .catch(() => {});
   }, []);
 
   const isHealthy = health.status === 'healthy';
@@ -102,6 +110,28 @@ export function Navbar({
 
         {/* Action Buttons (Desktop) */}
         <div className="hidden md:flex items-center gap-2.5">
+          {/* Admin Management / Login Trigger */}
+          <button
+            type="button"
+            onClick={() => {
+              if (onNavigateToAdmin) onNavigateToAdmin();
+              else window.location.hash = '#/admin';
+            }}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+              currentUser
+                ? 'bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 shadow-2xs'
+                : 'text-slate-600 dark:text-slate-300 hover:text-orange-500 hover:bg-slate-100 dark:hover:bg-slate-900 border border-slate-200/80 dark:border-slate-800'
+            }`}
+            title={currentUser ? `Admin Portal (${currentUser.email || currentUser.username})` : 'Sign in to manage projects & portfolio'}
+          >
+            {currentUser ? (
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            ) : (
+              <LockIcon className="w-3.5 h-3.5 text-orange-500" />
+            )}
+            <span>{currentUser ? `Admin @${(currentUser.username || currentUser.email.split('@')[0])}` : 'Admin Login'}</span>
+          </button>
+
           {/* Download App Trigger */}
           {onOpenInstall && (
             <Button
@@ -142,6 +172,23 @@ export function Navbar({
 
         {/* Mobile Hamburger & Actions */}
         <div className="flex md:hidden items-center gap-2">
+          {/* Mobile Admin Icon Button */}
+          <button
+            type="button"
+            onClick={() => {
+              if (onNavigateToAdmin) onNavigateToAdmin();
+              else window.location.hash = '#/admin';
+            }}
+            className={`p-2 rounded-xl border text-xs font-semibold transition-colors ${
+              currentUser
+                ? 'border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600'
+                : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300'
+            }`}
+            title="Admin Login & Management"
+          >
+            <LockIcon className="w-4 h-4 text-orange-500" />
+          </button>
+
           {onOpenInstall && (
             <button
               type="button"
@@ -233,6 +280,23 @@ export function Navbar({
                 <span>Live System Telemetry</span>
               </span>
               <span className="text-[10px] font-bold text-orange-500 uppercase">Live</span>
+            </button>
+
+            {/* Admin Management Mobile Link */}
+            <button
+              type="button"
+              onClick={() => {
+                closeMobileMenu();
+                if (onNavigateToAdmin) onNavigateToAdmin();
+                else window.location.hash = '#/admin';
+              }}
+              className="px-3.5 py-2.5 rounded-xl transition-all flex items-center justify-between text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600 pl-3.5 font-medium cursor-pointer"
+            >
+              <span className="flex items-center gap-2">
+                <LockIcon className="w-4 h-4 text-orange-500" />
+                <span>{currentUser ? `Admin Portal (@${(currentUser.username || currentUser.email.split('@')[0])})` : 'Admin Sign In'}</span>
+              </span>
+              <span className="text-[10px] font-bold text-emerald-600 uppercase">{currentUser ? 'Active' : 'Auth'}</span>
             </button>
           </nav>
 

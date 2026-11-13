@@ -1,8 +1,7 @@
-import React from 'react';
-import { GithubIcon, LinkedinIcon, TerminalIcon, WhatsappIcon, ActivityIcon } from './icons';
+import { GithubIcon, LinkedinIcon, TerminalIcon, WhatsappIcon, ActivityIcon, LockIcon } from './icons';
 import logoSvg from '../assets/dev-tiku.svg';
 
-export function Footer({ onOpenTerminal, onNavigateToTelemetry }) {
+export function Footer({ onOpenTerminal, onNavigateToTelemetry, onNavigateToAdmin }) {
   return (
     <footer className="border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-950 py-12 transition-colors">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -23,6 +22,21 @@ export function Footer({ onOpenTerminal, onNavigateToTelemetry }) {
         </div>
 
         <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+          <a
+            href="#/admin"
+            onClick={(e) => {
+              if (onNavigateToAdmin) {
+                e.preventDefault();
+                onNavigateToAdmin();
+              }
+            }}
+            className="flex items-center gap-1.5 text-slate-600 dark:text-slate-300 hover:text-orange-500 font-semibold transition-colors cursor-pointer"
+            title="Admin Login & Management Portal"
+          >
+            <LockIcon className="w-3.5 h-3.5 text-orange-500" />
+            <span>Admin Portal</span>
+          </a>
+
           <a
             href="#/telemetry"
             onClick={(e) => {

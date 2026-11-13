@@ -1,14 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { getProjects, pingProject } from '../api/client';
+import { useState, useEffect, useCallback } from 'react';
+import {
+  getProjects,
+  pingProject,
+  getStoredUser,
+  getCurrentUser,
+  logout,
+  deleteProject,
+} from '../api/client';
 import { PrimaryButton, SecondaryButton } from './Button';
-import { ActivityIcon, ExternalLinkIcon, GithubIcon, RefreshIcon } from './icons';
+import {
+  ActivityIcon,
+  ExternalLinkIcon,
+  GithubIcon,
+  RefreshIcon,
+  LockIcon,
+  PlusIcon,
+  EditIcon,
+  TrashIcon,
+} from './icons';
 import { ProjectCardSkeleton } from './Skeleton';
+import { AdminLoginModal } from './AdminLoginModal';
+import { ProjectEditModal } from './ProjectEditModal';
 
 export function ProjectsSection({ onNavigateToCaseStudy }) {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedTag, setSelectedTag] = useState('all');
   const [pingStates, setPingStates] = useState({});
+  const [currentUser, setCurrentUser] = useState(getStoredUser());
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [feedbackToast, setFeedbackToast] = useState(null);
 
   const filterTags = [
     { label: 'All Projects', slug: 'all' },
@@ -19,15 +42,40 @@ export function ProjectsSection({ onNavigateToCaseStudy }) {
     { label: 'Docker & Cloud', slug: 'docker' },
   ];
 
-  useEffect(() => {
-    setLoading(true);
+  const fetchProjects = useCallback(() => {
     getProjects(selectedTag === 'all' ? null : selectedTag)
-      .then((data) => setProjects(data))
-      .catch(() => {})
-      .finally(() => {
-        setTimeout(() => setLoading(false), 250);
+      .then((data) => {
+        setProjects(data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
       });
   }, [selectedTag]);
+
+  useEffect(() => {
+    let isMounted = true;
+    getProjects(selectedTag === 'all' ? null : selectedTag)
+      .then((data) => {
+        if (isMounted) {
+          setProjects(data);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (isMounted) setLoading(false);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedTag]);
+
+  useEffect(() => {
+    getCurrentUser().then((u) => {
+      if (u) setCurrentUser(u);
+    });
+  }, []);
 
   const handlePing = async (slug) => {
     setPingStates((prev) => ({
@@ -41,12 +89,41 @@ export function ProjectsSection({ onNavigateToCaseStudy }) {
         ...prev,
         [slug]: { loading: false, result: res },
       }));
-    } catch (e) {
+    } catch {
       setPingStates((prev) => ({
         ...prev,
         [slug]: { loading: false, result: { status: 'offline', latency_ms: null } },
       }));
     }
+  };
+
+  const handleOpenCreate = () => {
+    setSelectedProject(null);
+    setEditModalOpen(true);
+  };
+
+  const handleOpenEdit = (project) => {
+    setSelectedProject(project);
+    setEditModalOpen(true);
+  };
+
+  const handleProjectSaved = (saved) => {
+    setFeedbackToast(`Saved "${saved.title || 'Project'}" successfully.`);
+    setTimeout(() => setFeedbackToast(null), 3000);
+    fetchProjects();
+  };
+
+  const handleProjectDeleted = () => {
+    setFeedbackToast('Project deleted successfully.');
+    setTimeout(() => setFeedbackToast(null), 3000);
+    fetchProjects();
+  };
+
+  const handleLogout = () => {
+    logout();
+    setCurrentUser(null);
+    setFeedbackToast('Logged out of admin session.');
+    setTimeout(() => setFeedbackToast(null), 3000);
   };
 
   return (
@@ -65,22 +142,53 @@ export function ProjectsSection({ onNavigateToCaseStudy }) {
           </p>
         </div>
 
-        {/* Tag Filters */}
-        <div className="flex flex-wrap gap-2">
-          {filterTags.map((t) => (
-            <button
-              key={t.slug}
-              type="button"
-              onClick={() => setSelectedTag(t.slug)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-                selectedTag === t.slug
-                  ? 'bg-orange-500 text-white shadow-xs'
-                  : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-orange-400'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
+        {/* Tag Filters & Admin Controls */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+          <div className="flex flex-wrap gap-2">
+            {filterTags.map((t) => (
+              <button
+                key={t.slug}
+                type="button"
+                onClick={() => setSelectedTag(t.slug)}
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                  selectedTag === t.slug
+                    ? 'bg-orange-500 text-white shadow-xs'
+                    : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:border-orange-400'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Admin Action Trigger in Projects Section */}
+          <div className="flex items-center gap-2 pt-2 sm:pt-0">
+            {currentUser ? (
+              <div className="flex items-center gap-2">
+                <PrimaryButton size="sm" onClick={handleOpenCreate} leftIcon={<PlusIcon className="w-3.5 h-3.5" />}>
+                  New Project
+                </PrimaryButton>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="px-2.5 py-1 rounded-xl border border-slate-200 dark:border-slate-800 text-[11px] font-semibold text-slate-500 hover:text-red-500 cursor-pointer"
+                  title="Sign out of admin"
+                >
+                  Logout
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setLoginModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-200/90 dark:border-slate-800/80 bg-slate-50 dark:bg-slate-900 text-xs font-semibold text-slate-600 dark:text-slate-400 hover:text-orange-500 hover:border-orange-300 transition-colors cursor-pointer"
+                title="Admin Authentication via SimpleJWT"
+              >
+                <LockIcon className="w-3.5 h-3.5 text-orange-500" />
+                <span>Admin Manage</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -184,43 +292,82 @@ export function ProjectsSection({ onNavigateToCaseStudy }) {
                 </div>
 
                 {/* Card Action Buttons: Primary & Secondary */}
-                <div className="flex flex-wrap sm:flex-nowrap items-center gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800/80">
-                  <a
-                    href={`#/case-study/${p.slug || p.id}`}
-                    className="inline-flex shrink-0"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      if (onNavigateToCaseStudy) {
-                        onNavigateToCaseStudy(p.slug || p.id);
-                      } else {
-                        window.location.hash = `#/case-study/${p.slug || p.id}`;
-                      }
-                    }}
-                  >
-                    <PrimaryButton size="sm">
-                      Read Case Study
-                    </PrimaryButton>
-                  </a>
+                <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 pt-4 border-t border-slate-100 dark:border-slate-800/80">
+                  <div className="flex items-center gap-2.5">
+                    <a
+                      href={`#/case-study/${p.slug || p.id}`}
+                      className="inline-flex shrink-0"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        if (onNavigateToCaseStudy) {
+                          onNavigateToCaseStudy(p.slug || p.id);
+                        } else {
+                          window.location.hash = `#/case-study/${p.slug || p.id}`;
+                        }
+                      }}
+                    >
+                      <PrimaryButton size="sm">
+                        Read Case Study
+                      </PrimaryButton>
+                    </a>
 
-                  {p.slug === 'tikushop' || (!p.github_url && p.demo_url) ? (
-                    <a href={p.demo_url || 'https://tikushop.com'} target="_blank" rel="noreferrer" className="inline-flex shrink-0">
-                      <SecondaryButton size="sm" leftIcon={<ExternalLinkIcon className="w-3.5 h-3.5 text-orange-500" />}>
-                        View Website
-                      </SecondaryButton>
-                    </a>
-                  ) : p.github_url ? (
-                    <a href={p.github_url} target="_blank" rel="noreferrer" className="inline-flex shrink-0">
-                      <SecondaryButton size="sm" leftIcon={<GithubIcon className="w-3.5 h-3.5" />}>
-                        Source
-                      </SecondaryButton>
-                    </a>
-                  ) : null}
+                    {p.slug === 'tikushop' || (!p.github_url && p.demo_url) ? (
+                      <a href={p.demo_url || 'https://tikushop.com'} target="_blank" rel="noreferrer" className="inline-flex shrink-0">
+                        <SecondaryButton size="sm" leftIcon={<ExternalLinkIcon className="w-3.5 h-3.5 text-orange-500" />}>
+                          View Website
+                        </SecondaryButton>
+                      </a>
+                    ) : p.github_url ? (
+                      <a href={p.github_url} target="_blank" rel="noreferrer" className="inline-flex shrink-0">
+                        <SecondaryButton size="sm" leftIcon={<GithubIcon className="w-3.5 h-3.5" />}>
+                          Source
+                        </SecondaryButton>
+                      </a>
+                    ) : null}
+                  </div>
+
+                  {currentUser && (
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEdit(p)}
+                      className="inline-flex items-center gap-1 text-xs text-orange-600 dark:text-orange-400 font-semibold hover:underline cursor-pointer"
+                    >
+                      <EditIcon className="w-3.5 h-3.5" />
+                      <span>Edit Project</span>
+                    </button>
+                  )}
                 </div>
               </div>
             );
           })
         )}
       </div>
+
+      {/* Floating Feedback Toast */}
+      {feedbackToast && (
+        <div className="fixed bottom-6 right-6 z-50 px-4 py-3 rounded-2xl bg-slate-900 text-white text-xs font-semibold shadow-2xl border border-slate-700 animate-slide-up">
+          {feedbackToast}
+        </div>
+      )}
+
+      {/* Admin Login Modal */}
+      <AdminLoginModal
+        isOpen={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+        onAuthChange={setCurrentUser}
+      />
+
+      {/* Project Create / Edit Modal */}
+      <ProjectEditModal
+        isOpen={editModalOpen}
+        onClose={() => {
+          setEditModalOpen(false);
+          setSelectedProject(null);
+        }}
+        project={selectedProject}
+        onSaved={handleProjectSaved}
+        onDeleted={handleProjectDeleted}
+      />
     </section>
   );
 }

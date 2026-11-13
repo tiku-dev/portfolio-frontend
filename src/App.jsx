@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { Hero } from './components/Hero';
@@ -10,17 +10,22 @@ import { TerminalModal } from './components/TerminalModal';
 import { InstallAppModal } from './components/InstallAppModal';
 import { CaseStudyPage } from './components/CaseStudyPage';
 import { TelemetryPage } from './components/TelemetryPage';
+import { AdminDashboardPage } from './components/AdminDashboardPage';
 import { getResumeData } from './api/client';
 
 function parseRoute() {
   const hash = window.location.hash || '';
-  const matchCaseStudy = hash.match(/^#\/?case-?study\/([^\/?#]+)/i);
+  const matchCaseStudy = hash.match(/^#\/?case-?study\/([^/?#]+)/i);
   if (matchCaseStudy) {
     return { view: 'case-study', id: decodeURIComponent(matchCaseStudy[1]) };
   }
   const matchTelemetry = hash.match(/^#\/?telemetry(\b|\/|\?|$)/i);
   if (matchTelemetry) {
     return { view: 'telemetry' };
+  }
+  const matchAdmin = hash.match(/^#\/?(admin|login)(\b|\/|\?|$)/i);
+  if (matchAdmin) {
+    return { view: 'admin' };
   }
   return { view: 'home' };
 }
@@ -58,7 +63,7 @@ export function App() {
     if (currentRoute.view !== 'home') return;
     const hash = window.location.hash.replace('#', '');
     if (hash && ['projects', 'experience', 'contact'].includes(hash)) {
-      setActiveSection(hash);
+      requestAnimationFrame(() => setActiveSection(hash));
     }
   }, [currentRoute]);
 
@@ -70,6 +75,12 @@ export function App() {
   const handleNavigateToTelemetry = () => {
     window.location.hash = '#/telemetry';
     setCurrentRoute({ view: 'telemetry' });
+  };
+
+  const handleNavigateToAdmin = () => {
+    window.location.hash = '#/admin';
+    setCurrentRoute({ view: 'admin' });
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const handleBackToPortfolio = () => {
@@ -114,6 +125,10 @@ export function App() {
   const handleNavigate = (sectionId) => {
     if (sectionId === 'telemetry') {
       handleNavigateToTelemetry();
+      return;
+    }
+    if (sectionId === 'admin' || sectionId === 'login') {
+      handleNavigateToAdmin();
       return;
     }
     setActiveSection(sectionId);
@@ -247,6 +262,30 @@ export function App() {
     );
   }
 
+  // If viewing dedicated Admin Management Dashboard
+  if (currentRoute.view === 'admin') {
+    return (
+      <>
+        <AdminDashboardPage
+          onBack={handleBackToPortfolio}
+          onNavigateToTelemetry={handleNavigateToTelemetry}
+        />
+
+        {/* Interactive Developer Terminal / Console Modal */}
+        <TerminalModal
+          isOpen={terminalOpen}
+          onClose={() => setTerminalOpen(false)}
+        />
+
+        {/* Download / Install App Modal for Mobile & PC */}
+        <InstallAppModal
+          isOpen={installPromptOpen}
+          onClose={handleCloseInstallPrompt}
+        />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-orange-500 selection:text-white pb-24 md:pb-0">
       {/* Top Navigation with Mobile Drawer, Live Status & Install App Trigger */}
@@ -254,6 +293,7 @@ export function App() {
         activeSection={activeSection}
         onNavigate={handleNavigate}
         onNavigateToTelemetry={handleNavigateToTelemetry}
+        onNavigateToAdmin={handleNavigateToAdmin}
         onOpenTerminal={() => setTerminalOpen(true)}
         onOpenInstall={() => setInstallPromptOpen(true)}
       />
@@ -279,6 +319,7 @@ export function App() {
       <Footer
         onOpenTerminal={() => setTerminalOpen(true)}
         onNavigateToTelemetry={handleNavigateToTelemetry}
+        onNavigateToAdmin={handleNavigateToAdmin}
       />
 
       {/* Interactive Developer Terminal / Console Modal */}
