@@ -1,5 +1,3 @@
-import React from 'react';
-
 /**
  * Standard Button component configured for the chosen Orange theme.
  * 
@@ -21,6 +19,7 @@ export function Button({
   className = '',
   leftIcon,
   rightIcon,
+  as: Component = 'button',
   ...props
 }) {
   const baseStyles =
@@ -53,9 +52,9 @@ export function Button({
   const widthStyle = fullWidth ? 'w-full' : '';
 
   return (
-    <button
-      type={type}
-      disabled={disabled || isLoading}
+    <Component
+      type={Component === 'button' ? type : undefined}
+      disabled={Component === 'button' ? (disabled || isLoading) : undefined}
       className={`${baseStyles} ${selectedVariant} ${selectedSize} ${widthStyle} ${className}`}
       {...props}
     >
@@ -87,7 +86,7 @@ export function Button({
       <span>{children}</span>
 
       {!isLoading && rightIcon && <span className="shrink-0">{rightIcon}</span>}
-    </button>
+    </Component>
   );
 }
 

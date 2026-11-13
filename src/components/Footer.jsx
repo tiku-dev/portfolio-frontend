@@ -1,8 +1,8 @@
 import React from 'react';
-import { GithubIcon, LinkedinIcon, TerminalIcon, WhatsappIcon } from './icons';
+import { GithubIcon, LinkedinIcon, TerminalIcon, WhatsappIcon, ActivityIcon } from './icons';
 import logoSvg from '../assets/dev-tiku.svg';
 
-export function Footer({ onOpenTerminal }) {
+export function Footer({ onOpenTerminal, onNavigateToTelemetry }) {
   return (
     <footer className="border-t border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-950 py-12 transition-colors">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -22,7 +22,22 @@ export function Footer({ onOpenTerminal }) {
           </div>
         </div>
 
-        <div className="flex items-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+        <div className="flex flex-wrap items-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
+          <a
+            href="#/telemetry"
+            onClick={(e) => {
+              if (onNavigateToTelemetry) {
+                e.preventDefault();
+                onNavigateToTelemetry();
+              }
+            }}
+            className="flex items-center gap-1.5 text-orange-600 dark:text-orange-400 hover:text-orange-500 font-semibold transition-colors cursor-pointer"
+            title="View Live System Telemetry & Infrastructure"
+          >
+            <ActivityIcon className="w-4 h-4 text-orange-500" />
+            <span>Live Telemetry</span>
+          </a>
+
           <button
             type="button"
             onClick={onOpenTerminal}

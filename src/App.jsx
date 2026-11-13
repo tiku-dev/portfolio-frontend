@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { Hero } from './components/Hero';
-import { TelemetryRibbon } from './components/TelemetryRibbon';
 import { ProjectsSection } from './components/ProjectsSection';
 import { ExperienceSection } from './components/ExperienceSection';
 import { ContactSection } from './components/ContactSection';
@@ -10,13 +9,18 @@ import { Footer } from './components/Footer';
 import { TerminalModal } from './components/TerminalModal';
 import { InstallAppModal } from './components/InstallAppModal';
 import { CaseStudyPage } from './components/CaseStudyPage';
+import { TelemetryPage } from './components/TelemetryPage';
 import { getResumeData } from './api/client';
 
 function parseRoute() {
   const hash = window.location.hash || '';
-  const match = hash.match(/^#\/?case-?study\/([^\/?#]+)/i);
-  if (match) {
-    return { view: 'case-study', id: decodeURIComponent(match[1]) };
+  const matchCaseStudy = hash.match(/^#\/?case-?study\/([^\/?#]+)/i);
+  if (matchCaseStudy) {
+    return { view: 'case-study', id: decodeURIComponent(matchCaseStudy[1]) };
+  }
+  const matchTelemetry = hash.match(/^#\/?telemetry(\b|\/|\?|$)/i);
+  if (matchTelemetry) {
+    return { view: 'telemetry' };
   }
   return { view: 'home' };
 }
@@ -53,7 +57,7 @@ export function App() {
   useEffect(() => {
     if (currentRoute.view !== 'home') return;
     const hash = window.location.hash.replace('#', '');
-    if (hash && ['projects', 'telemetry', 'experience', 'contact'].includes(hash)) {
+    if (hash && ['projects', 'experience', 'contact'].includes(hash)) {
       setActiveSection(hash);
     }
   }, [currentRoute]);
@@ -61,6 +65,11 @@ export function App() {
   const handleNavigateToCaseStudy = (slugOrId) => {
     window.location.hash = `#/case-study/${slugOrId}`;
     setCurrentRoute({ view: 'case-study', id: slugOrId });
+  };
+
+  const handleNavigateToTelemetry = () => {
+    window.location.hash = '#/telemetry';
+    setCurrentRoute({ view: 'telemetry' });
   };
 
   const handleBackToPortfolio = () => {
@@ -103,6 +112,10 @@ export function App() {
 
   // Smooth scroll handler for both desktop and mobile navigation clicks
   const handleNavigate = (sectionId) => {
+    if (sectionId === 'telemetry') {
+      handleNavigateToTelemetry();
+      return;
+    }
     setActiveSection(sectionId);
     if (sectionId === 'hero') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -120,7 +133,7 @@ export function App() {
   useEffect(() => {
     if (currentRoute.view !== 'home') return;
 
-    const sectionIds = ['hero', 'projects', 'telemetry', 'experience', 'contact'];
+    const sectionIds = ['hero', 'projects', 'experience', 'contact'];
     const observer = new IntersectionObserver(
       (entries) => {
         const visible = entries.filter((e) => e.isIntersecting);
@@ -202,12 +215,45 @@ export function App() {
     );
   }
 
+  // If viewing dedicated Live Telemetry page
+  if (currentRoute.view === 'telemetry') {
+    return (
+      <>
+        <TelemetryPage
+          onBack={handleBackToPortfolio}
+          onOpenTerminal={() => setTerminalOpen(true)}
+          onOpenInstall={() => setInstallPromptOpen(true)}
+        />
+
+        {/* Interactive Developer Terminal / Console Modal */}
+        <TerminalModal
+          isOpen={terminalOpen}
+          onClose={() => setTerminalOpen(false)}
+        />
+
+        {/* Download / Install App Modal for Mobile & PC */}
+        <InstallAppModal
+          isOpen={installPromptOpen}
+          onClose={handleCloseInstallPrompt}
+        />
+
+        {/* Mobile Floating Bottom Navigation Bar */}
+        <MobileBottomNav
+          activeSection="telemetry"
+          onNavigate={handleNavigate}
+          onOpenTerminal={() => setTerminalOpen(true)}
+        />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-slate-50/50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 flex flex-col font-sans transition-colors selection:bg-orange-500 selection:text-white pb-24 md:pb-0">
       {/* Top Navigation with Mobile Drawer, Live Status & Install App Trigger */}
       <Navbar
         activeSection={activeSection}
         onNavigate={handleNavigate}
+        onNavigateToTelemetry={handleNavigateToTelemetry}
         onOpenTerminal={() => setTerminalOpen(true)}
         onOpenInstall={() => setInstallPromptOpen(true)}
       />
@@ -218,9 +264,6 @@ export function App() {
           bio={profileBio}
           onOpenTerminal={() => setTerminalOpen(true)}
         />
-
-        {/* Live Backend Telemetry Stats */}
-        <TelemetryRibbon />
 
         {/* Systems & Case Studies with Live Ping Probe */}
         <ProjectsSection onNavigateToCaseStudy={handleNavigateToCaseStudy} />
@@ -233,7 +276,10 @@ export function App() {
       </main>
 
       {/* Footer */}
-      <Footer onOpenTerminal={() => setTerminalOpen(true)} />
+      <Footer
+        onOpenTerminal={() => setTerminalOpen(true)}
+        onNavigateToTelemetry={handleNavigateToTelemetry}
+      />
 
       {/* Interactive Developer Terminal / Console Modal */}
       <TerminalModal
