@@ -1,13 +1,15 @@
 import React from 'react';
-import { PrimaryButton, SecondaryButton } from './Button';
-import { TerminalIcon, ServerIcon } from './icons';
+import { PrimaryButton } from './Button';
+import { ServerIcon } from './icons';
+import { Skeleton } from './Skeleton';
 
-export function Hero({ onOpenTerminal, bio }) {
+export function Hero({ bio, loading }) {
+  const isLoading = loading !== undefined ? loading : !bio;
   const profileName = bio?.full_name || 'Tiku Faith';
   const headline = bio?.headline || 'Senior Full Stack & Systems Engineer';
-  const summary =
-    bio?.summary ||
-    'Building end-to-end web applications — crafting reactive, polished React & TypeScript user interfaces backed by resilient Django, PostgreSQL, and distributed cloud systems.';
+  const fallbackSummary =
+    "Intermediate full-stack software engineer with 2+ years of experience building web and mobile applications in Python, JavaScript and Dart. Shipped TikuShop, an ecommerce platform with online payments, and built an AI-powered file management app during an internship at Digimark Consulting SARL. Completing a Master's in Computer Engineering in 2027 and seeking a remote software engineering role.";
+  const summary = bio?.summary || (!isLoading ? fallbackSummary : '');
 
   const techStack = [
     { name: 'React 19 & Next.js', category: 'Frontend' },
@@ -43,9 +45,22 @@ export function Hero({ onOpenTerminal, bio }) {
               {headline}
             </span>
           </h1>
-          <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed px-2">
-            {summary}
-          </p>
+          {isLoading ? (
+            <div
+              className="max-w-2xl mx-auto space-y-2.5 px-2 py-1 flex flex-col items-center"
+              aria-label="Loading bio summary"
+              role="status"
+            >
+              <Skeleton className="w-full h-4 sm:h-5 rounded-lg" />
+              <Skeleton className="w-11/12 h-4 sm:h-5 rounded-lg" />
+              <Skeleton className="w-4/5 h-4 sm:h-5 rounded-lg" />
+              <Skeleton className="w-3/5 h-4 sm:h-5 rounded-lg" />
+            </div>
+          ) : (
+            <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed px-2 animate-fade-in">
+              {summary}
+            </p>
+          )}
         </div>
 
         {/* Action Buttons with Staggered Entrance and Micro-interactions */}
@@ -55,15 +70,6 @@ export function Hero({ onOpenTerminal, bio }) {
               Explore Full Projects
             </PrimaryButton>
           </a>
-
-          {/* <SecondaryButton
-            size="lg"
-            fullWidth
-            onClick={onOpenTerminal}
-            leftIcon={<TerminalIcon className="w-5 h-5 text-orange-600 dark:text-orange-400" />}
-          >
-            Launch CLI Terminal
-          </SecondaryButton> */}
         </div>
 
         {/* Tech Stack Competencies with Hover Lift */}

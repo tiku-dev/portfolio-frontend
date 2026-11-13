@@ -164,51 +164,58 @@ export function TelemetryPage({ onBack, onNavigate, onNavigateToAdmin, onOpenTer
               <TelemetrySkeleton />
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6">
-              <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                  API Requests Served
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 pt-6">
+              <div className="p-3.5 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
+                <span className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate block">
+                  API Requests
                 </span>
-                <div className="text-3xl font-extrabold text-slate-800 dark:text-slate-100 mt-2">
+                <div className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 mt-1.5 sm:mt-2 truncate">
                   {stats?.total_requests_served?.toLocaleString() || '6,420'}
                 </div>
-                <span className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1 mt-2">
+                <span className="text-[10px] sm:text-[11px] text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1 mt-1.5 sm:mt-2 truncate">
                   ▲ 100% Non-blocking
                 </span>
               </div>
 
-              <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                  Avg Response Latency
+              <div className="p-3.5 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
+                <span className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate block">
+                  Avg Latency
                 </span>
-                <div className="text-3xl font-extrabold text-orange-500 mt-2">
-                  {stats?.average_response_time_ms ? `${stats.average_response_time_ms}ms` : '18.4ms'}
+                <div
+                  className="text-xl sm:text-2xl md:text-3xl font-extrabold text-orange-500 mt-1.5 sm:mt-2 truncate"
+                  title={stats?.average_response_time_ms ? `${stats.average_response_time_ms}ms` : '18.4ms'}
+                >
+                  {stats?.average_response_time_ms
+                    ? (parseFloat(stats.average_response_time_ms) >= 100
+                        ? `${Math.round(parseFloat(stats.average_response_time_ms))}ms`
+                        : `${parseFloat(stats.average_response_time_ms).toFixed(1)}ms`)
+                    : '18.4ms'}
                 </div>
-                <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-2 block">
+                <span className="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-1.5 sm:mt-2 block truncate">
                   Measured end-to-end
                 </span>
               </div>
 
-              <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
-                  Active Client Visitors
+              <div className="p-3.5 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
+                <span className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate block">
+                  Client Visitors
                 </span>
-                <div className="text-3xl font-extrabold text-slate-800 dark:text-slate-100 mt-2">
+                <div className="text-xl sm:text-2xl md:text-3xl font-extrabold text-slate-800 dark:text-slate-100 mt-1.5 sm:mt-2 truncate">
                   {stats?.unique_visitors_est?.toLocaleString() || '1,840'}
                 </div>
-                <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-2 block">
+                <span className="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-1.5 sm:mt-2 block truncate">
                   SHA-256 Sessions
                 </span>
               </div>
 
-              <div className="p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
-                <span className="text-xs text-slate-500 dark:text-slate-400 font-medium">
+              <div className="p-3.5 sm:p-5 rounded-2xl bg-slate-50 dark:bg-slate-950/60 border border-slate-100 dark:border-slate-800/80 hover:-translate-y-1 hover:shadow-md hover:border-orange-200 dark:hover:border-orange-800/80 transition-all duration-300">
+                <span className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium truncate block">
                   System & Database
                 </span>
-                <div className="text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-2">
+                <div className="text-xl sm:text-2xl md:text-3xl font-extrabold text-emerald-600 dark:text-emerald-400 mt-1.5 sm:mt-2 truncate">
                   {isHealthy ? 'Operational' : 'Online'}
                 </div>
-                <span className="text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-2 block">
+                <span className="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 font-medium mt-1.5 sm:mt-2 block truncate">
                   PostgreSQL · Connected 🟢
                 </span>
               </div>
@@ -358,12 +365,12 @@ export function TelemetryPage({ onBack, onNavigate, onNavigateToAdmin, onOpenTer
         </div>
 
         {/* Back navigation footer card */}
-        <div className="pt-4 flex items-center justify-between border-t border-slate-200/80 dark:border-slate-800/80">
+        <div className="pt-6 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 border-t border-slate-200/80 dark:border-slate-800/80">
           <SecondaryButton size="md" onClick={onBack} leftIcon={<ArrowLeftIcon className="w-4 h-4" />}>
             Back to Portfolio
           </SecondaryButton>
 
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-slate-400 text-center sm:text-right">
             tiku dev &mdash; Live Full Stack Systems
           </span>
         </div>

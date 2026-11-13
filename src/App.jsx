@@ -34,6 +34,7 @@ export function App() {
   const [terminalOpen, setTerminalOpen] = useState(false);
   const [installPromptOpen, setInstallPromptOpen] = useState(false);
   const [profileBio, setProfileBio] = useState(null);
+  const [bioLoading, setBioLoading] = useState(true);
   const [activeSection, setActiveSection] = useState('projects');
   const [currentRoute, setCurrentRoute] = useState(parseRoute);
 
@@ -51,11 +52,15 @@ export function App() {
   }, []);
 
   useEffect(() => {
+    setBioLoading(true);
     getResumeData()
       .then((data) => {
         if (data?.profile) setProfileBio(data.profile);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        setBioLoading(false);
+      });
   }, []);
 
   // Synchronize initial hash if on home page
@@ -275,9 +280,8 @@ export function App() {
 
         {/* Mobile Floating Bottom Navigation Bar */}
         <MobileBottomNav
-          activeSection="telemetry"
+          activeSection="projects"
           onNavigate={handleNavigate}
-          onOpenTerminal={() => setTerminalOpen(true)}
         />
       </>
     );
@@ -315,17 +319,14 @@ export function App() {
       <Navbar
         activeSection={activeSection}
         onNavigate={handleNavigate}
-        onNavigateToTelemetry={handleNavigateToTelemetry}
         onNavigateToAdmin={handleNavigateToAdmin}
-        onOpenTerminal={() => setTerminalOpen(true)}
-        onOpenInstall={() => setInstallPromptOpen(true)}
       />
 
       <main className="flex-1 space-y-4">
         {/* Hero Section */}
         <Hero
           bio={profileBio}
-          onOpenTerminal={() => setTerminalOpen(true)}
+          loading={bioLoading}
         />
 
         {/* Systems & Case Studies with Live Ping Probe */}
@@ -361,7 +362,6 @@ export function App() {
       <MobileBottomNav
         activeSection={activeSection}
         onNavigate={handleNavigate}
-        onOpenTerminal={() => setTerminalOpen(true)}
       />
     </div>
   );

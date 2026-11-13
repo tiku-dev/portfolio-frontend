@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ==========================================================================
    Global Smooth Scrolling & Scroll Padding for Sticky Navigation
    ========================================================================== */
@@ -51,17 +53,15 @@ h1, h2, h3, h4, h5, h6 {
   animation: shimmer 1.5s infinite ease-in-out;
 }
 
-@media (prefers-color-scheme: dark) {
-  .animate-shimmer {
-    background: linear-gradient(
-      90deg,
-      rgba(30, 41, 59, 0.7) 25%,
-      rgba(154, 52, 18, 0.28) 50%,
-      rgba(30, 41, 59, 0.7) 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite ease-in-out;
-  }
+.dark .animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(30, 41, 59, 0.7) 25%,
+    rgba(154, 52, 18, 0.28) 50%,
+    rgba(30, 41, 59, 0.7) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite ease-in-out;
 }
 
 /* Hero Entrance Animations */
@@ -184,9 +184,7 @@ h1, h2, h3, h4, h5, h6 {
     animation: none !important;
     background: rgba(241, 245, 249, 0.85);
   }
-  @media (prefers-color-scheme: dark) {
-    .animate-shimmer {
-      background: rgba(30, 41, 59, 0.7);
-    }
+  .dark .animate-shimmer {
+    background: rgba(30, 41, 59, 0.7);
   }
 }

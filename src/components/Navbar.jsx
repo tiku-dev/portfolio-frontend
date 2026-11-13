@@ -1,20 +1,19 @@
 import { useState, useEffect } from 'react';
 import { PrimaryButton } from './Button';
 import { getBackendHealth, getResumePdfDownloadUrl, getStoredUser, getCurrentUser } from '../api/client';
-import { DownloadIcon, MenuIcon, CloseIcon, ActivityIcon, LockIcon } from './icons';
+import { DownloadIcon, MenuIcon, CloseIcon, LockIcon, SunIcon, MoonIcon } from './icons';
+import { useTheme } from '../utils/theme';
 import logoSvg from '../assets/dev-tiku.svg';
 
 export function Navbar({
-  onOpenTerminal,
   activeSection = 'projects',
   onNavigate,
-  onOpenInstall,
-  onNavigateToTelemetry,
   onNavigateToAdmin,
 }) {
   const [health, setHealth] = useState({ status: 'checking', database: 'checking' });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState(getStoredUser());
+  const { theme, toggleTheme, isDark } = useTheme();
 
   const navItems = [
     { id: 'projects', label: 'Case Studies', mobileLabel: 'Full Stack Case Studies' },
@@ -67,15 +66,10 @@ export function Navbar({
             />
           </a>
 
-          {/* Live Full Stack Indicator Badge - Links to Telemetry */}
-          <button
-            type="button"
-            onClick={() => {
-              if (onNavigateToTelemetry) onNavigateToTelemetry();
-              else window.location.hash = '#/telemetry';
-            }}
-            title={`Full stack status: ${health.status} (DB: ${health.database}) — Click to view Telemetry`}
-            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-orange-300 dark:hover:border-orange-800/80 hover:text-orange-500 transition-colors cursor-pointer"
+          {/* Live Full Stack Indicator Badge */}
+          <div
+            title={`Full stack status: ${health.status} (DB: ${health.database})`}
+            className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 select-none"
           >
             <span
               className={`w-2 h-2 rounded-full ${
@@ -83,7 +77,7 @@ export function Navbar({
               }`}
             />
             <span>{isHealthy ? 'Full Stack API Online' : 'API Standby'}</span>
-          </button>
+          </div>
         </div>
 
         {/* Desktop Navigation Links with Active State */}
@@ -110,6 +104,21 @@ export function Navbar({
 
         {/* Action Buttons (Desktop) */}
         <div className="hidden md:flex items-center gap-2.5">
+          {/* Light / Dark Mode Toggle */}
+          <button
+            type="button"
+            onClick={toggleTheme}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="p-2 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 hover:text-orange-500 hover:border-orange-300 dark:hover:border-orange-700 transition-colors cursor-pointer"
+          >
+            {isDark ? (
+              <SunIcon className="w-4 h-4 text-amber-500 animate-fade-in" />
+            ) : (
+              <MoonIcon className="w-4 h-4 text-slate-600 animate-fade-in" />
+            )}
+          </button>
+
           {/* Admin Management / Login Trigger */}
           <button
             type="button"
@@ -149,21 +158,19 @@ export function Navbar({
 
         {/* Mobile Hamburger & Actions */}
         <div className="flex md:hidden items-center gap-2">
-          {/* Mobile Admin Icon Button */}
+          {/* Mobile Theme Toggle Button (Replaces Lock Icon) */}
           <button
             type="button"
-            onClick={() => {
-              if (onNavigateToAdmin) onNavigateToAdmin();
-              else window.location.hash = '#/admin';
-            }}
-            className={`p-2 rounded-xl border text-xs font-semibold transition-colors ${
-              currentUser
-                ? 'border-emerald-300 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600'
-                : 'border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300'
-            }`}
-            title="Admin Login & Management"
+            onClick={toggleTheme}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-300 hover:text-orange-500 hover:border-orange-300 dark:hover:border-orange-700 transition-colors cursor-pointer"
           >
-            <LockIcon className="w-4 h-4 text-orange-500" />
+            {isDark ? (
+              <SunIcon className="w-4 h-4 text-amber-500 animate-fade-in" />
+            ) : (
+              <MoonIcon className="w-4 h-4 text-slate-700 animate-fade-in" />
+            )}
           </button>
 
           <PrimaryButton
@@ -182,7 +189,7 @@ export function Navbar({
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle navigation menu"
-            className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-100 transition-colors"
+            className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 text-slate-700 dark:text-slate-200 hover:bg-slate-100 transition-colors cursor-pointer"
           >
             {mobileMenuOpen ? <CloseIcon className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
           </button>
@@ -193,21 +200,13 @@ export function Navbar({
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 pt-3 pb-6 space-y-4 shadow-xl animate-slide-down">
           {/* Status badge in mobile menu */}
-          <button
-            type="button"
-            onClick={() => {
-              closeMobileMenu();
-              if (onNavigateToTelemetry) onNavigateToTelemetry();
-              else window.location.hash = '#/telemetry';
-            }}
-            className="w-full flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800/80 text-xs hover:text-orange-500 transition-colors cursor-pointer"
-          >
+          <div className="w-full flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800/80 text-xs select-none">
             <span className="text-slate-500 dark:text-slate-400">Full Stack System Status:</span>
             <span className="inline-flex items-center gap-1.5 font-semibold text-emerald-600 dark:text-emerald-400">
               <span className={`w-2 h-2 rounded-full ${isHealthy ? 'bg-emerald-500 animate-pulse' : 'bg-amber-500'}`} />
               {isHealthy ? 'Operational 🟢' : 'Standby 🟡'}
             </span>
-          </button>
+          </div>
 
           <nav className="flex flex-col space-y-1.5 text-sm font-semibold">
             {navItems.map((item) => {
@@ -230,21 +229,19 @@ export function Navbar({
               );
             })}
 
-            {/* Live Telemetry Mobile Link */}
+            {/* Theme Toggle row in Mobile Drawer */}
             <button
               type="button"
               onClick={() => {
-                closeMobileMenu();
-                if (onNavigateToTelemetry) onNavigateToTelemetry();
-                else window.location.hash = '#/telemetry';
+                toggleTheme();
               }}
               className="px-3.5 py-2.5 rounded-xl transition-all flex items-center justify-between text-slate-700 dark:text-slate-200 hover:bg-orange-50 dark:hover:bg-orange-950/40 hover:text-orange-600 pl-3.5 font-medium cursor-pointer"
             >
               <span className="flex items-center gap-2">
-                <ActivityIcon className="w-4 h-4 text-orange-500" />
-                <span>Live System Telemetry</span>
+                {isDark ? <SunIcon className="w-4 h-4 text-amber-500" /> : <MoonIcon className="w-4 h-4 text-slate-600" />}
+                <span>Theme: {isDark ? 'Dark Mode' : 'Light Mode'}</span>
               </span>
-              <span className="text-[10px] font-bold text-orange-500 uppercase">Live</span>
+              <span className="text-[10px] font-bold text-orange-500 uppercase">{isDark ? 'Dark' : 'Light'}</span>
             </button>
 
             {/* Admin Management Mobile Link */}

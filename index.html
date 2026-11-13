@@ -20,6 +20,27 @@
   <meta name="apple-mobile-web-app-title" content="tiku dev" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+  <!-- Theme Initialization: default to light mode -->
+  <script>
+    (function () {
+      try {
+        var theme = localStorage.getItem('tiku_portfolio_theme') || localStorage.getItem('theme');
+        if (theme === 'dark') {
+          document.documentElement.classList.add('dark');
+          document.documentElement.classList.remove('light');
+          document.documentElement.style.colorScheme = 'dark';
+        } else {
+          document.documentElement.classList.remove('dark');
+          document.documentElement.classList.add('light');
+          document.documentElement.style.colorScheme = 'light';
+        }
+      } catch (e) {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      }
+    })();
+  </script>
 </head>
 
 <body>
