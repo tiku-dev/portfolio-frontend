@@ -2,19 +2,45 @@ import resumePdfAsset from '../assets/Tiku Faith – Software Engineer Resume.pd
 
 /**
  * Centralized API Client for Django Backend.
- * Connects to http://127.0.0.1:8000/api/v1/ with graceful fallback data.
+ * Dynamically resolves the API base URL for localhost, LAN mobile testing, and production.
  */
 
-const isLocalhost =
-  typeof window !== 'undefined' &&
-  (window.location.hostname === 'localhost' ||
-    window.location.hostname === '127.0.0.1' ||
-    window.location.hostname === '0.0.0.0');
+export function getApiBaseUrl() {
+  if (typeof window === 'undefined') {
+    return (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+  }
 
-export const API_BASE_URL = (
-  import.meta.env.VITE_API_URL ||
-  (isLocalhost ? 'http://127.0.0.1:8000' : 'https://portfolio-backend-five-ruby.vercel.app')
-).replace(/\/+$/, '');
+  const hostname = window.location.hostname;
+  const isLocalOrLan =
+    hostname === 'localhost' ||
+    hostname === '127.0.0.1' ||
+    hostname === '0.0.0.0' ||
+    /^192\.168\./.test(hostname) ||
+    /^10\./.test(hostname) ||
+    /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname) ||
+    hostname.endsWith('.local') ||
+    hostname.endsWith('.lan');
+
+  // If accessing locally or from a mobile phone on the same Wi-Fi network:
+  if (isLocalOrLan) {
+    // When running under Vite dev server or preview on port 5173, use relative path ""
+    // so requests hit Vite, which proxies /api -> http://127.0.0.1:8000 on the PC.
+    // This prevents mobile loopback (127.0.0.1:8000), firewall blocks, and CORS errors.
+    if (import.meta.env.DEV || window.location.port === '5173') {
+      return '';
+    }
+    return `http://${hostname}:8000`;
+  }
+
+  // Production deployment (e.g. Vercel)
+  const envUrl = (import.meta.env.VITE_API_URL || '').replace(/\/+$/, '');
+  if (envUrl && !envUrl.includes('127.0.0.1') && !envUrl.includes('localhost')) {
+    return envUrl;
+  }
+  return 'https://portfolio-backend-five-ruby.vercel.app';
+}
+
+export const API_BASE_URL = getApiBaseUrl();
 
 // JWT Token Storage & Helpers
 export function getAccessToken() {
@@ -49,7 +75,8 @@ export async function refreshAccessToken() {
   const refresh = getRefreshToken();
   if (!refresh) return null;
   try {
-    const res = await fetch(`${API_BASE_URL}/api/v1/accounts/refresh/`, {
+    const baseUrl = getApiBaseUrl();
+    const res = await fetch(`${baseUrl}/api/v1/accounts/refresh/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ refresh }),
@@ -70,7 +97,8 @@ export async function refreshAccessToken() {
 }
 
 async function request(endpoint, options = {}) {
-  const url = `${API_BASE_URL}${endpoint}`;
+  const baseUrl = getApiBaseUrl();
+  const url = `${baseUrl}${endpoint}`;
   const token = getAccessToken();
   const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
 
@@ -108,6 +136,9 @@ async function request(endpoint, options = {}) {
     return await res.json();
   } catch (err) {
     console.warn(`[API Client] Request to ${endpoint} failed:`, err.message);
+    if (err.name === 'TypeError' && err.message?.toLowerCase().includes('failed to fetch')) {
+      throw new Error('Unable to connect to the backend server. Please verify your connection.', { cause: err });
+    }
     throw err;
   }
 }

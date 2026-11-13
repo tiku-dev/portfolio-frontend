@@ -50,7 +50,7 @@ export function TelemetryPage({ onBack, onNavigate, onNavigateToAdmin, onOpenTer
         database: healthData.database || 'connected',
         latencyMs: elapsed,
         timestamp: new Date().toLocaleTimeString(),
-        endpoint: `${API_BASE_URL || 'https://portfolio-backend-five-ruby.vercel.app'}/api/health/`,
+        endpoint: `${API_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : '') || 'https://portfolio-backend-five-ruby.vercel.app'}/api/health/`,
       });
     } catch {
       const elapsed = Math.round(performance.now() - start);
@@ -59,7 +59,7 @@ export function TelemetryPage({ onBack, onNavigate, onNavigateToAdmin, onOpenTer
         database: 'disconnected',
         latencyMs: elapsed,
         timestamp: new Date().toLocaleTimeString(),
-        endpoint: `${API_BASE_URL || 'https://portfolio-backend-five-ruby.vercel.app'}/api/health/`,
+        endpoint: `${API_BASE_URL || (typeof window !== 'undefined' ? window.location.origin : '') || 'https://portfolio-backend-five-ruby.vercel.app'}/api/health/`,
       });
     } finally {
       setProbing(false);
