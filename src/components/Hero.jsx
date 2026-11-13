@@ -1,12 +1,12 @@
 import React from 'react';
 import { PrimaryButton } from './Button';
 import { ServerIcon } from './icons';
-import { Skeleton } from './Skeleton';
+import { HeroSkeleton } from './Skeleton';
 
 export function Hero({ bio, loading }) {
   const isLoading = loading !== undefined ? loading : !bio;
   const profileName = bio?.full_name || 'Tiku Faith';
-  const headline = bio?.headline || 'Senior Full Stack & Systems Engineer';
+  const headline = bio?.headline || 'Intermediate Full-Stack Software Engineer | Python, JavaScript & Dart';
   const fallbackSummary =
     "Intermediate full-stack software engineer with 2+ years of experience building web and mobile applications in Python, JavaScript and Dart. Shipped TikuShop, an ecommerce platform with online payments, and built an AI-powered file management app during an internship at Digimark Consulting SARL. Completing a Master's in Computer Engineering in 2027 and seeking a remote software engineering role.";
   const summary = bio?.summary || (!isLoading ? fallbackSummary : '');
@@ -22,8 +22,17 @@ export function Hero({ bio, loading }) {
     { name: 'Docker & DevOps', category: 'DevOps' },
   ];
 
+  if (isLoading) {
+    return (
+      <section id="hero" className="relative overflow-hidden py-16 sm:py-24 scroll-mt-20">
+        <div className="absolute top-1/4 left-1/2 w-96 h-96 bg-orange-500/10 dark:bg-orange-500/5 rounded-full blur-3xl -z-10 pointer-events-none animate-ambient-glow" />
+        <HeroSkeleton />
+      </section>
+    );
+  }
+
   return (
-    <section id="hero" className="relative overflow-hidden py-16 sm:py-24 scroll-mt-20">
+    <section id="hero" className="relative overflow-hidden py-16 sm:py-24 scroll-mt-20 animate-fade-in">
       {/* Decorative ambient background glow with gentle breathing animation */}
       <div className="absolute top-1/4 left-1/2 w-96 h-96 bg-orange-500/10 dark:bg-orange-500/5 rounded-full blur-3xl -z-10 pointer-events-none animate-ambient-glow" />
 
@@ -45,22 +54,9 @@ export function Hero({ bio, loading }) {
               {headline}
             </span>
           </h1>
-          {isLoading ? (
-            <div
-              className="max-w-2xl mx-auto space-y-2.5 px-2 py-1 flex flex-col items-center"
-              aria-label="Loading bio summary"
-              role="status"
-            >
-              <Skeleton className="w-full h-4 sm:h-5 rounded-lg" />
-              <Skeleton className="w-11/12 h-4 sm:h-5 rounded-lg" />
-              <Skeleton className="w-4/5 h-4 sm:h-5 rounded-lg" />
-              <Skeleton className="w-3/5 h-4 sm:h-5 rounded-lg" />
-            </div>
-          ) : (
-            <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed px-2 animate-fade-in">
-              {summary}
-            </p>
-          )}
+          <p className="max-w-2xl mx-auto text-sm sm:text-base md:text-lg text-slate-600 dark:text-slate-400 leading-relaxed px-2 animate-fade-in">
+            {summary}
+          </p>
         </div>
 
         {/* Action Buttons with Staggered Entrance and Micro-interactions */}

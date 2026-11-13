@@ -59,7 +59,7 @@ export function App() {
       })
       .catch(() => {})
       .finally(() => {
-        setBioLoading(false);
+        setTimeout(() => setBioLoading(false), 300);
       });
   }, []);
 

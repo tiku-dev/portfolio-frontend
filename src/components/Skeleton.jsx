@@ -163,30 +163,37 @@ export function ExperienceSkeleton() {
  */
 export function HeroSkeleton() {
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 py-16 sm:py-24">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 animate-pulse">
       {/* Availability Pill */}
-      <Skeleton className="w-52 sm:w-64 h-7 rounded-full mx-auto" />
+      <div>
+        <Skeleton className="w-56 sm:w-64 h-7.5 rounded-full mx-auto" />
+      </div>
 
       {/* Main Title & Headline */}
       <div className="space-y-4">
-        <Skeleton className="w-3/4 sm:w-2/3 h-10 sm:h-14 rounded-2xl mx-auto" />
-        <Skeleton className="w-1/2 sm:w-2/5 h-6 sm:h-8 rounded-xl mx-auto" />
-        <Skeleton className="max-w-xl h-4 rounded-md mx-auto" />
-        <Skeleton className="max-w-md h-4 rounded-md mx-auto" />
+        <Skeleton className="w-64 sm:w-80 md:w-96 h-10 sm:h-12 md:h-14 rounded-2xl mx-auto" />
+        <Skeleton className="w-4/5 sm:w-3/4 md:w-2/3 h-7 sm:h-8 md:h-10 rounded-xl mx-auto" />
+
+        {/* Bio Summary Paragraph Lines */}
+        <div className="max-w-2xl mx-auto space-y-2.5 px-2 py-1 flex flex-col items-center pt-2">
+          <Skeleton className="w-full h-4 sm:h-5 rounded-lg" />
+          <Skeleton className="w-11/12 h-4 sm:h-5 rounded-lg" />
+          <Skeleton className="w-4/5 h-4 sm:h-5 rounded-lg" />
+          <Skeleton className="w-3/5 h-4 sm:h-5 rounded-lg" />
+        </div>
       </div>
 
-      {/* Action Buttons: Full width on mobile, inline on tablet & desktop */}
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 pt-2 w-full max-w-sm sm:max-w-none mx-auto">
-        <Skeleton className="w-full sm:w-44 h-12 rounded-xl" />
-        <Skeleton className="w-full sm:w-44 h-12 rounded-xl" />
+      {/* Action Button: Explore Full Projects */}
+      <div className="flex justify-center pt-2 w-full max-w-sm sm:max-w-none mx-auto">
+        <Skeleton className="w-full sm:w-56 h-12 rounded-xl" />
       </div>
 
       {/* Tech Stack Pills */}
       <div className="pt-8 border-t border-slate-200/80 dark:border-slate-800/80">
-        <Skeleton className="w-36 h-3 rounded-md mx-auto mb-4" />
-        <div className="flex flex-wrap justify-center gap-2">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <Skeleton key={i} className="w-20 sm:w-24 h-7 rounded-xl" />
+        <Skeleton className="w-44 h-3.5 rounded-md mx-auto mb-4" />
+        <div className="flex flex-wrap justify-center gap-2 max-w-2xl mx-auto">
+          {['w-28', 'w-24', 'w-28', 'w-32', 'w-24', 'w-32', 'w-36', 'w-28'].map((w, i) => (
+            <Skeleton key={i} className={`${w} h-7.5 rounded-xl`} />
           ))}
         </div>
       </div>

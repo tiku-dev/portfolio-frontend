@@ -2,6 +2,14 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+:root {
+  color-scheme: light;
+}
+
+:root.dark {
+  color-scheme: dark;
+}
+
 /* ==========================================================================
    Global Smooth Scrolling & Scroll Padding for Sticky Navigation
    ========================================================================== */
@@ -10,21 +18,24 @@ html {
   scroll-padding-top: 5rem;
 }
 
-body {
-  overflow-x: hidden;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+@layer base {
+  body {
+    overflow-x: hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #f8fafc;
+    color: #1e293b;
+  }
 
-/* Softened charcoal headings: lighter, gentler slate (#334155 / slate-700) to eliminate harsh darkness */
-h1, h2, h3, h4, h5, h6 {
-  color: #334155;
-}
+  .dark body,
+  html.dark body {
+    background-color: #020617;
+    color: #f8fafc;
+  }
 
-@media (prefers-color-scheme: dark) {
   h1, h2, h3, h4, h5, h6 {
-    color: #e2e8f0;
+    color: inherit;
   }
 }
 
